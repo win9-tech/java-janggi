@@ -2,6 +2,7 @@ package controller;
 
 import domain.Board;
 import domain.Formation;
+import domain.Position;
 import view.InputView;
 import view.OutputView;
 
@@ -17,6 +18,23 @@ public class JanggiController {
 
     public void run() {
         Board board = initBoard();
+        processMove(board);
+    }
+
+    private void processMove(Board board) {
+        Position sourcePosition = readSourcePosition();
+    }
+
+    private Position readSourcePosition() {
+        while (true) {
+            try {
+                int x = inputView.readSourceXPosition();
+                int y = inputView.readSourceYPosition();
+                return Position.of(x,y);
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 
     private Board initBoard() {
@@ -26,7 +44,6 @@ public class JanggiController {
         outputView.printBoardStatus(board.getBoard());
         return board;
     }
-
 
     private Formation readChoFormation() {
         while(true) {
