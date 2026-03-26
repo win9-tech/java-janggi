@@ -2,12 +2,13 @@ package controller;
 
 import domain.Formation;
 import view.InputView;
+import view.OutputView;
 
 public class JanggiController {
 
     private final InputView inputView;
 
-    public JanggiController(InputView inputView) {
+    public JanggiController(InputView inputView, OutputView outputView) {
         this.inputView = inputView;
     }
 
