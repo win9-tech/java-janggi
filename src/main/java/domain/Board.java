@@ -3,6 +3,7 @@ package domain;
 import domain.piece.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Board {
@@ -13,93 +14,55 @@ public class Board {
         createBoard(choFormation, hanFormation);
     }
 
+    public Map<Position, Piece> getBoard() {
+        return board;
+    }
+
     private void createBoard(Formation choFormation, Formation hanFormation) {
         for (int x = 1; x <= 9; x++) {
             for (int y = 1; y <= 10; y++) {
-                createPiece(Position.of(x, y), new Empty());
+                placePiece(Position.of(x, y), PieceType.EMPTY.create(Side.NONE));
             }
         }
-
-        // 한나라 (HAN) - 위쪽 (y=1~4)
-        createPiece(Position.of(1, 1), new Chariot(Side.HAN));
-        createPiece(Position.of(9, 1), new Chariot(Side.HAN));
-        createPiece(Position.of(4, 1), new Guard(Side.HAN));
-        createPiece(Position.of(6, 1), new Guard(Side.HAN));
-        createPiece(Position.of(5, 2), new King(Side.HAN));
-        createPiece(Position.of(2, 3), new Cannon(Side.HAN));
-        createPiece(Position.of(8, 3), new Cannon(Side.HAN));
-        createPiece(Position.of(1, 4), new Soldier(Side.HAN));
-        createPiece(Position.of(3, 4), new Soldier(Side.HAN));
-        createPiece(Position.of(5, 4), new Soldier(Side.HAN));
-        createPiece(Position.of(7, 4), new Soldier(Side.HAN));
-        createPiece(Position.of(9, 4), new Soldier(Side.HAN));
-
-        // 초나라 (CHO) - 아래쪽 (y=7~10)
-        createPiece(Position.of(1, 10), new Chariot(Side.CHO));
-        createPiece(Position.of(9, 10), new Chariot(Side.CHO));
-        createPiece(Position.of(4, 10), new Guard(Side.CHO));
-        createPiece(Position.of(6, 10), new Guard(Side.CHO));
-        createPiece(Position.of(5, 9), new King(Side.CHO));
-        createPiece(Position.of(2, 8), new Cannon(Side.CHO));
-        createPiece(Position.of(8, 8), new Cannon(Side.CHO));
-        createPiece(Position.of(1, 7), new Soldier(Side.CHO));
-        createPiece(Position.of(3, 7), new Soldier(Side.CHO));
-        createPiece(Position.of(5, 7), new Soldier(Side.CHO));
-        createPiece(Position.of(7, 7), new Soldier(Side.CHO));
-        createPiece(Position.of(9, 7), new Soldier(Side.CHO));
-
-        // 초나라 마/상 배치
-        if (choFormation == Formation.상마마상) {
-            createPiece(Position.of(2, 10), new Elephant(Side.CHO));
-            createPiece(Position.of(3, 10), new Horse(Side.CHO));
-            createPiece(Position.of(7, 10), new Horse(Side.CHO));
-            createPiece(Position.of(8, 10), new Elephant(Side.CHO));
-        } else if (choFormation == Formation.마상상마) {
-            createPiece(Position.of(2, 10), new Horse(Side.CHO));
-            createPiece(Position.of(3, 10), new Elephant(Side.CHO));
-            createPiece(Position.of(7, 10), new Elephant(Side.CHO));
-            createPiece(Position.of(8, 10), new Horse(Side.CHO));
-        } else if (choFormation == Formation.상마상마) {
-            createPiece(Position.of(2, 10), new Elephant(Side.CHO));
-            createPiece(Position.of(3, 10), new Horse(Side.CHO));
-            createPiece(Position.of(7, 10), new Elephant(Side.CHO));
-            createPiece(Position.of(8, 10), new Horse(Side.CHO));
-        } else if (choFormation == Formation.마상마상) {
-            createPiece(Position.of(2, 10), new Horse(Side.CHO));
-            createPiece(Position.of(3, 10), new Elephant(Side.CHO));
-            createPiece(Position.of(7, 10), new Horse(Side.CHO));
-            createPiece(Position.of(8, 10), new Elephant(Side.CHO));
-        }
-
-        // 한나라 마/상 배치
-        if (hanFormation == Formation.상마마상) {
-            createPiece(Position.of(2, 1), new Elephant(Side.HAN));
-            createPiece(Position.of(3, 1), new Horse(Side.HAN));
-            createPiece(Position.of(7, 1), new Horse(Side.HAN));
-            createPiece(Position.of(8, 1), new Elephant(Side.HAN));
-        } else if (hanFormation == Formation.마상상마) {
-            createPiece(Position.of(2, 1), new Horse(Side.HAN));
-            createPiece(Position.of(3, 1), new Elephant(Side.HAN));
-            createPiece(Position.of(7, 1), new Elephant(Side.HAN));
-            createPiece(Position.of(8, 1), new Horse(Side.HAN));
-        } else if (hanFormation == Formation.상마상마) {
-            createPiece(Position.of(2, 1), new Elephant(Side.HAN));
-            createPiece(Position.of(3, 1), new Horse(Side.HAN));
-            createPiece(Position.of(7, 1), new Elephant(Side.HAN));
-            createPiece(Position.of(8, 1), new Horse(Side.HAN));
-        } else if (hanFormation == Formation.마상마상) {
-            createPiece(Position.of(2, 1), new Horse(Side.HAN));
-            createPiece(Position.of(3, 1), new Elephant(Side.HAN));
-            createPiece(Position.of(7, 1), new Horse(Side.HAN));
-            createPiece(Position.of(8, 1), new Elephant(Side.HAN));
-        }
+        placePieces(choFormation, Side.CHO);
+        placePieces(hanFormation, Side.HAN);
     }
 
-    private void createPiece(Position position, Piece piece) {
+    private void placePieces(Formation hanFormation, Side side) {
+
+        List<Integer> rows = getRowForSide(side);
+
+        placePiece(Position.of(1, rows.get(0)), PieceType.CHARIOT.create(side));
+        placePiece(Position.of(9, rows.get(0)), PieceType.CHARIOT.create(side));
+
+        placePiece(Position.of(4, rows.get(0)), PieceType.GUARD.create(side));
+        placePiece(Position.of(6, rows.get(0)), PieceType.GUARD.create(side));
+
+        placePiece(Position.of(5, rows.get(1)), PieceType.KING.create(side));
+
+        placePiece(Position.of(2, rows.get(2)), PieceType.CANNON.create(side));
+        placePiece(Position.of(8, rows.get(2)), PieceType.CANNON.create(side));
+
+        placePiece(Position.of(1, rows.get(3)), PieceType.SOLDIER.create(side));
+        placePiece(Position.of(3, rows.get(3)), PieceType.SOLDIER.create(side));
+        placePiece(Position.of(5, rows.get(3)), PieceType.SOLDIER.create(side));
+        placePiece(Position.of(7, rows.get(3)), PieceType.SOLDIER.create(side));
+        placePiece(Position.of(9, rows.get(3)), PieceType.SOLDIER.create(side));
+
+        placePiece(Position.of(2, rows.get(0)), hanFormation.getPieceTypes().get(0).create(side));
+        placePiece(Position.of(3, rows.get(0)), hanFormation.getPieceTypes().get(1).create(side));
+        placePiece(Position.of(7, rows.get(0)), hanFormation.getPieceTypes().get(2).create(side));
+        placePiece(Position.of(8, rows.get(0)), hanFormation.getPieceTypes().get(3).create(side));
+    }
+
+    private List<Integer> getRowForSide(Side side) {
+        if(side == Side.HAN) {
+            return List.of(1,2,3,4);
+        }
+        return List.of(10,9,8,7);
+    }
+
+    private void placePiece(Position position, Piece piece) {
         board.put(position, piece);
-    }
-
-    public Map<Position, Piece> getBoard() {
-        return board;
     }
 }
