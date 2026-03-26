@@ -23,6 +23,19 @@ public class JanggiController {
 
     private void processMove(Board board) {
         Position sourcePosition = readSourcePosition();
+        Position targetPosition = readTargetPosition();
+    }
+
+    private Position readTargetPosition() {
+        while (true) {
+            try {
+                int x = inputView.readTargetXPosition();
+                int y = inputView.readTargetYPosition();
+                return Position.of(x,y);
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 
     private Position readSourcePosition() {

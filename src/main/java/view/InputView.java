@@ -31,6 +31,17 @@ public class InputView {
         return scanner.nextInt();
     }
 
+    public int readTargetXPosition() {
+        System.out.println();
+        System.out.println("목적지 x 좌표를 입력해주세요. (x 범위 1 ~ 9)");
+        return scanner.nextInt();
+    }
+
+    public int readTargetYPosition() {
+        System.out.println("목적지 y 좌표를 입력해주세요. (y 범위 1 ~ 10)");
+        return scanner.nextInt();
+    }
+
     private String readFormation() {
         for(Formation formation : Formation.values()) {
             System.out.println(formation.toDisplayString());
