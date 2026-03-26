@@ -26,6 +26,15 @@ public class OutputView {
         }
     }
 
+    public void printCurrentTurn(Side turn) {
+        System.out.println();
+        if(turn == Side.CHO) {
+            System.out.println("초의 차례입니다.");
+            return;
+        }
+        System.out.println("한의 차례입니다.");
+    }
+
     private void printRowNumber(int y) {
         if (y < 10) {
             System.out.print(" " + y + "  ");
