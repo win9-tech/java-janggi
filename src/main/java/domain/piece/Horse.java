@@ -6,4 +6,9 @@ public class Horse extends Piece {
     public Horse(Side side) {
         super(side);
     }
+
+    @Override
+    public String getName() {
+        return "마";
+    }
 }

@@ -6,4 +6,9 @@ public class Chariot extends Piece {
     public Chariot(Side side) {
         super(side);
     }
+
+    @Override
+    public String getName() {
+        return "차";
+    }
 }

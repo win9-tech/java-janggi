@@ -41,7 +41,7 @@ public class BoardTest {
         Board board = new Board(Formation.from("1"), Formation.from("2"));
         Map<Position, Piece> pieces = board.getBoard();
 
-        assertThat(pieces.get(Position.of(2, 5)).isSameSide(Side.HAN)).isTrue();
-        assertThat(pieces.get(Position.of(9, 5)).isSameSide(Side.CHO)).isTrue();
+        assertThat(pieces.get(Position.of(5, 2)).isSameSide(Side.HAN)).isTrue();
+        assertThat(pieces.get(Position.of(5, 9)).isSameSide(Side.CHO)).isTrue();
     }
 }

@@ -1,5 +1,6 @@
 package controller;
 
+import domain.Board;
 import domain.Formation;
 import view.InputView;
 import view.OutputView;
@@ -7,15 +8,25 @@ import view.OutputView;
 public class JanggiController {
 
     private final InputView inputView;
+    private final OutputView outputView;
 
     public JanggiController(InputView inputView, OutputView outputView) {
         this.inputView = inputView;
+        this.outputView = outputView;
     }
 
     public void run() {
-        Formation Choformation = readChoFormation();
-        Formation Hanformation = readHanFormation();
+        Board board = initBoard();
     }
+
+    private Board initBoard() {
+        Formation choformation = readChoFormation();
+        Formation hanformation = readHanFormation();
+        Board board = new Board(choformation, hanformation);
+        outputView.printBoardStatus(board.getBoard());
+        return board;
+    }
+
 
     private Formation readChoFormation() {
         while(true) {
