@@ -3,5 +3,12 @@ package domain;
 public enum Side {
     CHO,
     HAN,
-    NONE
+    NONE;
+
+    public Side opposite() {
+        if (this == CHO) {
+            return HAN;
+        }
+        return CHO;
+    }
 }

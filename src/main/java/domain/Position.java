@@ -35,4 +35,8 @@ public class Position {
             throw new IllegalArgumentException("y 좌표는 1~10, x 좌표는 1~9 사이여야 합니다.");
         }
     }
+
+    public Position createPosition(int dx, int dy) {
+        return Position.of(x + dx, y + dy);
+    }
 }

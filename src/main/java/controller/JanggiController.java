@@ -29,7 +29,7 @@ public class JanggiController {
             Position sourcePosition = readSourcePosition();
             Position targetPosition = readTargetPosition();
             try {
-                board.movePiece(sourcePosition, targetPosition);
+                board.movePiece(turn, sourcePosition, targetPosition);
                 turn = turn.opposite();
                 outputView.printBoardStatus(board.getBoard());
             } catch (IllegalArgumentException e) {

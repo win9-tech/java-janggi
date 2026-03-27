@@ -2,6 +2,7 @@ package domain;
 
 import domain.piece.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,36 @@ public class Board {
 
     public Board(Formation choFormation, Formation hanFormation) {
         createBoard(choFormation, hanFormation);
+    }
+
+    public void movePiece(Side side, Position sourcePosition, Position targetPosition) {
+        // 보드 출발지에서 기물을 꺼낸다.
+        Piece piece = board.get(sourcePosition);
+        // Empty인지 아닌지 확인한다.
+        if(piece instanceof Empty) {
+            throw new IllegalArgumentException("해당 위치에 기물이 존재하지 않습니다.");
+        }
+        // 팀인지 확인한다.
+        if(!piece.getSide().equals(side)) {
+            throw new IllegalArgumentException("선택한 기물은 아군 기물이 아닙니다.");
+        }
+
+        // 기물에게 경로를 묻는다.
+        List<Position> route = piece.findRoute(sourcePosition, targetPosition);
+        List<Piece> pieces = new ArrayList<>();
+        for(Position position : route) {
+            if(!position.equals(targetPosition)) {
+                pieces.add(board.get(position));
+            }
+        }
+
+        // 경로에 있는 기물을 확인하여 이동 가능한 경로인지 확인한다
+        piece.checkRoute(pieces);
+
+        piece.checkTarget(board.get(targetPosition));
+        // 목적지로 보내고 출발지를 Empty로 채운다.
+        board.put(targetPosition, board.get(sourcePosition));
+        board.put(sourcePosition, new Empty());
     }
 
     public Map<Position, Piece> getBoard() {
