@@ -30,23 +30,13 @@ public class Board {
     public void movePiece(Turn turn, Position sourcePosition, Position targetPosition) {
         Piece piece = board.get(sourcePosition);
 
-        if(piece instanceof Empty) {
-            throw new IllegalArgumentException("해당 위치에 기물이 존재하지 않습니다.");
-        }
-        if(!piece.getSide().equals(turn.current())) {
-            throw new IllegalArgumentException("선택한 기물은 아군 기물이 아닙니다.");
-        }
+        validatePieceExists(piece);
+        validateOwnPiece(piece, turn);
 
         List<Position> route = piece.findRoute(sourcePosition, targetPosition);
-        List<Piece> pieces = new ArrayList<>();
-        for(Position position : route) {
-            if(!position.equals(targetPosition)) {
-                pieces.add(board.get(position));
-            }
-        }
-        piece.checkRoute(pieces);
+        findPiecesOnRoute(piece, route, targetPosition);
 
-        piece.checkTarget(board.get(targetPosition));
+        validateAvailableTarget(piece, targetPosition);
         board.put(targetPosition, board.get(sourcePosition));
         board.put(sourcePosition, new Empty());
     }
@@ -97,5 +87,31 @@ public class Board {
         for(int i = 0; i < pieceTypes.size(); i++) {
             board.put(Position.of(formationX.get(i), y), pieceTypes.get(i).create(side));
         }
+    }
+
+    private void validatePieceExists(Piece piece) {
+        if(piece instanceof Empty) {
+            throw new IllegalArgumentException("해당 위치에 기물이 존재하지 않습니다.");
+        }
+    }
+
+    private void findPiecesOnRoute(Piece piece, List<Position> route, Position targetPosition) {
+        List<Piece> pieces = new ArrayList<>();
+        for(Position position : route) {
+            if(!position.equals(targetPosition)) {
+                pieces.add(board.get(position));
+            }
+        }
+        piece.checkRoute(pieces);
+    }
+
+    private void validateOwnPiece(Piece piece, Turn turn) {
+        if(!piece.getSide().equals(turn.current())) {
+            throw new IllegalArgumentException("선택한 기물은 아군 기물이 아닙니다.");
+        }
+    }
+
+    private void validateAvailableTarget(Piece piece, Position targetPosition) {
+        piece.checkTarget(board.get(targetPosition));
     }
 }
