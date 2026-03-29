@@ -5,6 +5,8 @@ import java.util.Map;
 
 public class Position {
 
+    private static final String INVALID_POSITION_RANGE = "x 좌표는 1~9, y 좌표는 1~10, 사이여야 합니다.";
+
     private static final Map<Integer, Position> CACHE = new HashMap<>();
     private final int x;
     private final int y;
@@ -31,7 +33,7 @@ public class Position {
 
     private static void validateOutOfRange(int x, int y) {
         if(!((1 <= x && x <= 9) && (1 <= y && y <= 10))) {
-            throw new IllegalArgumentException("x 좌표는 1~9, y 좌표는 1~10, 사이여야 합니다.");
+            throw new IllegalArgumentException(INVALID_POSITION_RANGE);
         }
     }
 }

@@ -8,9 +8,8 @@ import java.util.List;
 
 public abstract class Piece {
 
-    protected final String ERROR_PREFIX = "[ERROR] ";
-    protected final String CANNOT_CAPTURE_OWN_PIECE = ERROR_PREFIX + "아군 기물은 잡을 수 없습니다.";
-    protected final String INVALID_TARGET_POSITION = ERROR_PREFIX + "이동할 수 없는 목적지입니다.";
+    protected static final String CANNOT_CAPTURE_OWN_PIECE = "아군 기물은 잡을 수 없습니다.";
+    protected static final String INVALID_TARGET_POSITION = "이동할 수 없는 목적지입니다.";
 
     protected final Side side;
     protected final MovementStrategy movementStrategy;

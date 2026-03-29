@@ -9,6 +9,9 @@ import java.util.Map;
 
 public class Board {
 
+    private static final String PIECE_NOT_FOUND = "해당 위치에 기물이 존재하지 않습니다.";
+    private static final String NOT_OWN_PIECE = "선택한 기물은 아군 기물이 아닙니다.";
+
     private final int BACK_Y = 0;
     private final int KING_Y = 1;
     private final int CANNON_Y = 2;
@@ -91,7 +94,7 @@ public class Board {
 
     private void validatePieceExists(Piece piece) {
         if(piece instanceof Empty) {
-            throw new IllegalArgumentException("해당 위치에 기물이 존재하지 않습니다.");
+            throw new IllegalArgumentException(PIECE_NOT_FOUND);
         }
     }
 
@@ -107,7 +110,7 @@ public class Board {
 
     private void validateOwnPiece(Piece piece, Turn turn) {
         if(!piece.getSide().equals(turn.current())) {
-            throw new IllegalArgumentException("선택한 기물은 아군 기물이 아닙니다.");
+            throw new IllegalArgumentException(NOT_OWN_PIECE);
         }
     }
 

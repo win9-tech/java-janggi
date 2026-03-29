@@ -12,6 +12,7 @@ public class OutputView {
     private static final String RED = "\u001B[31m";
     private static final String BLUE = "\u001B[34m";
     private static final String RESET = "\u001B[0m";
+    private static final String ERROR_PREFIX = "[ERROR] ";
 
     public void printBoardStatus(Map<Position, Piece> board) {
         System.out.println();
@@ -57,5 +58,9 @@ public class OutputView {
             return BLUE;
         }
         return RESET;
+    }
+
+    public void printErrorMessage(String errorMessage) {
+        System.out.println(ERROR_PREFIX + errorMessage);
     }
 }

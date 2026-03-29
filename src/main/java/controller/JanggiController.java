@@ -29,7 +29,7 @@ public class JanggiController {
                 board.movePiece(turn, sourcePosition, targetPosition);
                 turn.next();
             } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
+                outputView.printErrorMessage(e.getMessage());
             }
             outputView.printBoardStatus(board.getBoard());
         }
@@ -42,7 +42,7 @@ public class JanggiController {
                 int y = inputView.readTargetYPosition();
                 return Position.of(x,y);
             } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
+                outputView.printErrorMessage(e.getMessage());
             }
         }
     }
@@ -54,7 +54,7 @@ public class JanggiController {
                 int y = inputView.readSourceYPosition();
                 return Position.of(x,y);
             } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
+                outputView.printErrorMessage(e.getMessage());
             }
         }
     }
@@ -73,7 +73,7 @@ public class JanggiController {
                 String choFormation = inputView.readChoFormation();
                 return Formation.from(choFormation);
             } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
+                outputView.printErrorMessage(e.getMessage());
             }
         }
     }
@@ -84,7 +84,7 @@ public class JanggiController {
                 String hanFormation = inputView.readHanFormation();
                 return Formation.from(hanFormation);
             } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
+                outputView.printErrorMessage(e.getMessage());
             }
         }
     }
