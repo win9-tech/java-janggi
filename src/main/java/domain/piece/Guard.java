@@ -3,6 +3,8 @@ package domain.piece;
 import domain.Direction;
 import domain.Position;
 import domain.Side;
+import domain.strategy.MovementStrategy;
+import domain.strategy.PathMovement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +15,8 @@ public class Guard extends Piece {
             List.of(Direction.UP), List.of(Direction.DOWN), List.of(Direction.RIGHT), List.of(Direction.LEFT)
     );
 
-    public Guard(Side side) {
-        super(side);
+    public Guard(Side side, MovementStrategy movementStrategy) {
+        super(side, movementStrategy);
     }
 
     @Override
@@ -33,7 +35,7 @@ public class Guard extends Piece {
             }
             positions.clear();
         }
-        throw new IllegalArgumentException("이동할 수 없는 목적지입니다.");
+        throw new IllegalArgumentException(INVALID_TARGET_POSITION);
     }
 
     @Override

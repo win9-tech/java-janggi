@@ -3,42 +3,28 @@ package domain.piece;
 import domain.Direction;
 import domain.Position;
 import domain.Side;
+import domain.strategy.LinearMovement;
+import domain.strategy.MovementStrategy;
+import domain.strategy.PathMovement;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Horse extends Piece {
 
-    private final List<List<Direction>> movementStrategy = List.of(
+    private final List<List<Direction>> paths = List.of(
       List.of(Direction.UP, Direction.UP_LEFT), List.of(Direction.UP, Direction.UP_RIGHT),
       List.of(Direction.RIGHT, Direction.UP_RIGHT), List.of(Direction.RIGHT, Direction.DOWN_RIGHT),
       List.of(Direction.DOWN, Direction.DOWN_LEFT), List.of(Direction.DOWN, Direction.DOWN_RIGHT),
       List.of(Direction.LEFT, Direction.UP_LEFT), List.of(Direction.LEFT, Direction.DOWN_LEFT)
     );
 
-    public Horse(Side side) {
-        super(side);
+    public Horse(Side side, MovementStrategy movementStrategy) {
+        super(side, movementStrategy);
     }
 
     @Override
     public List<Position> findRoute(Position sourcePosition, Position targetPosition) {
-        List<Position> positions = new ArrayList<>();
-        for(List<Direction> path : movementStrategy) {
-            Position position = sourcePosition;
-            for(Direction direction : path) {
-                try{
-                    position = position.createPosition(direction.getX(), direction.getY());
-                    positions.add(position);
-                } catch (IllegalArgumentException e) {
-                    break;
-                }
-            }
-            if(positions.contains(targetPosition)) {
-                return List.copyOf(positions);
-            }
-            positions.clear();
-        }
-        throw new IllegalArgumentException("이동할 수 없는 목적지입니다.");
+        return movementStrategy.findRoute(paths, sourcePosition, targetPosition);
     }
 
     @Override

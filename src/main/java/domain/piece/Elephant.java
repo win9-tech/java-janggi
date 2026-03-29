@@ -3,6 +3,7 @@ package domain.piece;
 import domain.Direction;
 import domain.Position;
 import domain.Side;
+import domain.strategy.PathMovement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ public class Elephant extends Piece {
     );
 
     public Elephant(Side side) {
-        super(side);
+        super(side, new PathMovement());
     }
 
     @Override

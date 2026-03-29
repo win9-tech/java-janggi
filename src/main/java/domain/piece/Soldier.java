@@ -3,23 +3,24 @@ package domain.piece;
 import domain.Direction;
 import domain.Position;
 import domain.Side;
+import domain.strategy.MovementStrategy;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Soldier extends Piece {
 
-    private final List<List<Direction>> movementStrategy;
+    private final List<List<Direction>> paths;
 
-    public Soldier(Side side) {
-        super(side);
+    public Soldier(Side side, MovementStrategy movementStrategy) {
+        super(side, movementStrategy);
         if(Side.CHO == side) {
-            movementStrategy = List.of(
+            paths = List.of(
                     List.of(Direction.UP), List.of(Direction.RIGHT), List.of(Direction.LEFT)
             );
             return;
         }
-        movementStrategy = List.of(
+        paths = List.of(
                 List.of(Direction.DOWN), List.of(Direction.RIGHT), List.of(Direction.LEFT)
         );
     }
@@ -27,7 +28,7 @@ public class Soldier extends Piece {
     @Override
     public List<Position> findRoute(Position sourcePosition, Position targetPosition) {
         List<Position> positions = new ArrayList<>();
-        for(List<Direction> path : movementStrategy) {
+        for(List<Direction> path : paths) {
             for(Direction direction : path) {
                 try{
                     positions.add(sourcePosition.createPosition(direction.getX(), direction.getY()));
@@ -40,7 +41,7 @@ public class Soldier extends Piece {
             }
             positions.clear();
         }
-        throw new IllegalArgumentException("이동할 수 없는 목적지입니다.");
+        throw new IllegalArgumentException(INVALID_TARGET_POSITION);
     }
 
     @Override

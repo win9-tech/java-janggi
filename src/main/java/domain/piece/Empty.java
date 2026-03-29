@@ -8,12 +8,12 @@ import java.util.List;
 public class Empty extends Piece{
 
     public Empty() {
-        super(Side.NONE);
+        super(Side.NONE, null);
     }
 
     @Override
     public List<Position> findRoute(Position sourcePosition, Position targetPosition) {
-        return List.of();
+        throw new IllegalArgumentException(INVALID_TARGET_POSITION);
     }
 
     @Override

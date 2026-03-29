@@ -3,70 +3,53 @@ package domain.piece;
 import domain.Direction;
 import domain.Position;
 import domain.Side;
+import domain.strategy.MovementStrategy;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Cannon extends Piece {
 
-    private final List<List<Direction>> movementStrategy = List.of(
-            List.of(Direction.UP), List.of(Direction.DOWN), List.of(Direction.RIGHT), List.of(Direction.LEFT)
-    );
+    private final String CANNOT_JUMP_WITH_CANNON = ERROR_PREFIX + "포를 넘어갈 수 없습니다.";
+    private final String CANNOT_CAPTURE_CANNON_WITH_CANNON = ERROR_PREFIX + "포는 포끼리 잡을 수 없습니다.";
 
-    public Cannon(Side side) {
-        super(side);
+    private final List<List<Direction>> paths = List.of(
+            List.of(Direction.UP), List.of(Direction.DOWN), List.of(Direction.RIGHT), List.of(Direction.LEFT));
+
+    public Cannon(Side side, MovementStrategy movementStrategy) {
+        super(side, movementStrategy);
     }
 
 
     @Override
     public List<Position> findRoute(Position sourcePosition, Position targetPosition) {
-        for (List<Direction> path : movementStrategy) {
-            List<Position> positions = new ArrayList<>();
-            Direction direction = path.getFirst();
-            Position position = sourcePosition;
-
-            while (true) {
-                try {
-                    Position nextPosition = position.createPosition(direction.getX(), direction.getY());
-                    positions.add(nextPosition);
-                    if (nextPosition.equals(targetPosition)) {
-                        return positions;
-                    }
-                    position = nextPosition;
-                } catch (IllegalArgumentException e) {
-                    break;
-                }
-            }
-        }
-        throw new IllegalArgumentException("이동할 수 없는 목적지입니다.");
+        return movementStrategy.findRoute(paths, sourcePosition, targetPosition);
     }
 
     @Override
-    public boolean checkRoute(List<Piece> pieces) {
+    public void checkRoute(List<Piece> pieces) {
         // 목적지까지는 포가아닌 기물이 한 개만 있어야 함.
         int cnt = 0;
         for(Piece piece : pieces) {
             if(piece instanceof Cannon) {
-                throw new IllegalArgumentException("포를 넘어갈 수 없습니다.");
+                throw new IllegalArgumentException(CANNOT_JUMP_WITH_CANNON);
             }
             if(!(piece instanceof Empty)) {
                 cnt++;
             }
         }
         if(cnt != 1) {
-            throw new IllegalArgumentException("이동할 수 없는 목적지입니다.");
+            throw new IllegalArgumentException(INVALID_TARGET_POSITION);
         }
-        return true;
     }
 
     @Override
     public void checkTarget(Piece piece) {
         if(piece.getSide().equals(side)) {
-            throw new IllegalArgumentException("아군 기물은 잡을 수 없습니다.");
+            throw new IllegalArgumentException(CANNOT_CAPTURE_OWN_PIECE);
         }
 
         if(piece instanceof Cannon) {
-            throw new IllegalArgumentException("포는 포끼리 잡을 수 없습니다.");
+            throw new IllegalArgumentException(CANNOT_CAPTURE_CANNON_WITH_CANNON);
         }
     }
 

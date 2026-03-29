@@ -2,15 +2,22 @@ package domain.piece;
 
 import domain.Position;
 import domain.Side;
+import domain.strategy.MovementStrategy;
 
 import java.util.List;
 
 public abstract class Piece {
 
-    protected final Side side;
+    protected final String ERROR_PREFIX = "[ERROR] ";
+    protected final String CANNOT_CAPTURE_OWN_PIECE = ERROR_PREFIX + "아군 기물은 잡을 수 없습니다.";
+    protected final String INVALID_TARGET_POSITION = ERROR_PREFIX + "이동할 수 없는 목적지입니다.";
 
-    protected Piece(Side side) {
+    protected final Side side;
+    protected final MovementStrategy movementStrategy;
+
+    protected Piece(Side side, MovementStrategy movementStrategy) {
         this.side = side;
+        this.movementStrategy = movementStrategy;
     }
 
     public boolean isSameSide(Side side) {
@@ -23,19 +30,18 @@ public abstract class Piece {
 
     public void checkTarget(Piece piece) {
         if(side.equals(piece.side)) {
-            throw new IllegalArgumentException("아군 기물은 잡을 수 없습니다.");
+            throw new IllegalArgumentException(CANNOT_CAPTURE_OWN_PIECE);
         }
     }
 
     public abstract List<Position> findRoute(Position sourcePosition, Position targetPosition);
 
-    public boolean checkRoute(List<Piece> pieces) {
+    public void checkRoute(List<Piece> pieces) {
         for(Piece piece : pieces) {
             if(!(piece instanceof Empty)) {
-                return false;
+                throw new IllegalArgumentException(CANNOT_CAPTURE_OWN_PIECE);
             }
         }
-        return true;
     }
 
     public abstract String getName();
