@@ -8,12 +8,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-/**
- * 1. List<Position>로 경로를 받아 기물이 이동 가능한지 판단한다. [기물 테스트에서 진행]
- */
-
 class CannonTest {
 
     @DisplayName("포는 이동한 경로를 반환한다.")

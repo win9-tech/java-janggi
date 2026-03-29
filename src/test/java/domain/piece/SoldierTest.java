@@ -7,33 +7,71 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class SoldierTest {
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "[{index}] ({0},{1}) -> ({2},{3})")
     @CsvSource({
-            "1, 7, 1, 6, CHO, true",
-            "1, 7, 1, 5, CHO, false",
-            "1, 4, 1, 5, HAN, true",
-            "1, 4, 1, 3, HAN, false"
+            "5, 7, 5, 6",
+            "5, 7, 4, 7",
+            "5, 7, 6, 7"
     })
-    @DisplayName("초/병이 이동할 수 있는 위치인지 검증한다.")
-    void 기물이_이동할_수_있는_위치인지_검증한다(
-            int sourceX, int sourceY, int targetX, int targetY, Side side, boolean pass
-    ) {
-        // given
-        Position sourcePosition = Position.of(sourceX, sourceY);
-        Position targetPosition = Position.of(targetX, targetY);
-        Piece piece = PieceType.SOLDIER.create(side);
+    @DisplayName("초 병이 이동 가능한 위치로 이동하면 경로를 반환한다")
+    void 초_병이_이동_가능한_위치로_이동하면_경로를_반환한다(
+            int sourceX, int sourceY, int targetX, int targetY) {
+        Position source = Position.of(sourceX, sourceY);
+        Position target = Position.of(targetX, targetY);
+        Piece piece = PieceType.SOLDIER.create(Side.CHO);
 
-        // when & then
-        if (pass) {
-            Assertions.assertThatCode(() -> piece.findRoute(sourcePosition, targetPosition))
-                    .doesNotThrowAnyException();
-        } else {
-            Assertions.assertThatThrownBy(() -> piece.findRoute(sourcePosition, targetPosition))
-                    .isInstanceOf(IllegalArgumentException.class);
-        }
+        Assertions.assertThatCode(() -> piece.findRoute(source, target))
+                .doesNotThrowAnyException();
+    }
+
+    @ParameterizedTest(name = "[{index}] ({0},{1}) -> ({2},{3})")
+    @CsvSource({
+            "5, 7, 5, 8",
+            "5, 7, 5, 5"
+    })
+    @DisplayName("초 병이 이동 불가능한 위치로 이동하면 예외가 발생한다")
+    void 초_병이_이동_불가능한_위치로_이동하면_예외가_발생한다(
+            int sourceX, int sourceY, int targetX, int targetY) {
+        Position source = Position.of(sourceX, sourceY);
+        Position target = Position.of(targetX, targetY);
+        Piece piece = PieceType.SOLDIER.create(Side.CHO);
+
+        Assertions.assertThatThrownBy(() -> piece.findRoute(source, target))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @ParameterizedTest(name = "[{index}] ({0},{1}) -> ({2},{3})")
+    @CsvSource({
+            "5, 4, 5, 5",
+            "5, 4, 4, 4",
+            "5, 4, 6, 4"
+    })
+    @DisplayName("한 졸이 이동 가능한 위치로 이동하면 경로를 반환한다")
+    void 한_졸이_이동_가능한_위치로_이동하면_경로를_반환한다(
+            int sourceX, int sourceY, int targetX, int targetY) {
+        Position source = Position.of(sourceX, sourceY);
+        Position target = Position.of(targetX, targetY);
+        Piece piece = PieceType.SOLDIER.create(Side.HAN);
+
+        Assertions.assertThatCode(() -> piece.findRoute(source, target))
+                .doesNotThrowAnyException();
+    }
+
+    @ParameterizedTest(name = "[{index}] ({0},{1}) -> ({2},{3})")
+    @CsvSource({
+            "5, 4, 5, 3",
+            "5, 4, 5, 2"
+    })
+    @DisplayName("한 졸이 이동 불가능한 위치로 이동하면 예외가 발생한다")
+    void 한_졸이_이동_불가능한_위치로_이동하면_예외가_발생한다(
+            int sourceX, int sourceY, int targetX, int targetY) {
+        Position source = Position.of(sourceX, sourceY);
+        Position target = Position.of(targetX, targetY);
+        Piece piece = PieceType.SOLDIER.create(Side.HAN);
+
+        Assertions.assertThatThrownBy(() -> piece.findRoute(source, target))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 }

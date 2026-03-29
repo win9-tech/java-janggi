@@ -9,29 +9,37 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 class ChariotTest {
 
-    @ParameterizedTest
-    @CsvSource({
-            "2, 3, 2, 7, HAN, true",
-            "8, 3, 2, 3, HAN, true",
-            "2, 3, 4, 6, HAN, false",
-            "8, 3, 5, 9, HAN, false"
-    })
-    @DisplayName("기물이 이동할 수 있는 위치인지 검증한다.")
-    void 기물이_이동할_수_있는_위치인지_검증한다(
-            int sourceX, int sourceY, int targetX, int targetY, Side side, boolean expected
-    ) {
-        // given
-        Position sourcePosition = Position.of(sourceX, sourceY);
-        Position targetPosition = Position.of(targetX, targetY);
-        Piece piece = PieceType.CHARIOT.create(Side.CHO);
+    private static final Side IRRELEVANT_SIDE = Side.CHO;
 
-        // when & then
-        if (expected) {
-            Assertions.assertThatCode(() -> piece.findRoute(sourcePosition, targetPosition))
-                    .doesNotThrowAnyException();
-        } else {
-            Assertions.assertThatThrownBy(() -> piece.findRoute(sourcePosition, targetPosition))
-                    .isInstanceOf(IllegalArgumentException.class);
-        }
+    @ParameterizedTest(name = "[{index}] ({0},{1}) -> ({2},{3})")
+    @CsvSource({
+            "2, 3, 2, 7",
+            "8, 3, 2, 3"
+    })
+    @DisplayName("차가 이동 가능한 위치로 이동하면 경로를 반환한다")
+    void 차가_이동_가능한_위치로_이동하면_경로를_반환한다(
+            int sourceX, int sourceY, int targetX, int targetY) {
+        Position source = Position.of(sourceX, sourceY);
+        Position target = Position.of(targetX, targetY);
+        Piece piece = PieceType.CHARIOT.create(IRRELEVANT_SIDE);
+
+        Assertions.assertThatCode(() -> piece.findRoute(source, target))
+                .doesNotThrowAnyException();
+    }
+
+    @ParameterizedTest(name = "[{index}] ({0},{1}) -> ({2},{3})")
+    @CsvSource({
+            "2, 3, 4, 6",
+            "8, 3, 5, 9"
+    })
+    @DisplayName("차가 이동 불가능한 위치로 이동하면 예외가 발생한다")
+    void 차가_이동_불가능한_위치로_이동하면_예외가_발생한다(
+            int sourceX, int sourceY, int targetX, int targetY) {
+        Position source = Position.of(sourceX, sourceY);
+        Position target = Position.of(targetX, targetY);
+        Piece piece = PieceType.CHARIOT.create(IRRELEVANT_SIDE);
+
+        Assertions.assertThatThrownBy(() -> piece.findRoute(source, target))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 }
