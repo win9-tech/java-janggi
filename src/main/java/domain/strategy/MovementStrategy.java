@@ -10,8 +10,15 @@ public abstract class MovementStrategy {
     protected final String ERROR_PREFIX = "[ERROR] ";
     protected final String INVALID_TARGET_POSITION = ERROR_PREFIX + "이동할 수 없는 목적지입니다.";
 
-
-    public abstract List<Position> findRoute(List<List<Direction>> paths, Position sourcePosition, Position targetPosition);
+    public List<Position> findRoute(List<List<Direction>> paths, Position sourcePosition, Position targetPosition) {
+        for(List<Direction> path: paths) {
+            List<Position> positions = buildRoute(path, sourcePosition, targetPosition);
+            if(positions.contains(targetPosition)) {
+                return positions;
+            }
+        }
+        throw new IllegalArgumentException(INVALID_TARGET_POSITION);
+    }
 
     protected abstract List<Position> buildRoute(List<Direction> route, Position sourcePosition, Position targetPosition);
 }

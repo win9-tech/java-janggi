@@ -36,6 +36,12 @@ public class Position {
         }
     }
 
+    public boolean canMove(int dx, int dy) {
+        int nx = x + dx;
+        int ny = y + dy;
+        return 1 <= nx && nx <= 9 && 1 <= ny && ny <= 10;
+    }
+
     public Position createPosition(int dx, int dy) {
         return Position.of(x + dx, y + dy);
     }

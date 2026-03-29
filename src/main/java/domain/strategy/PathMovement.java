@@ -9,29 +9,18 @@ import java.util.List;
 public class PathMovement extends MovementStrategy{
 
     @Override
-    public List<Position> findRoute(List<List<Direction>> paths, Position sourcePosition, Position targetPosition) {
-        for (List<Direction> path : paths) {
-            List<Position> route = buildRoute(path, sourcePosition, targetPosition);
-            if(route.contains(targetPosition)){
-                return List.copyOf(route);
-            }
-        }
-        throw new IllegalArgumentException(INVALID_TARGET_POSITION);
-    }
-
-    @Override
-    protected List<Position> buildRoute(List<Direction> path, Position sourcePosition, Position targetPosition) {
+    protected List<Position> buildRoute(List<Direction> path, Position source, Position target) {
         List<Position> route = new ArrayList<>();
-        Position position = sourcePosition;
-        for(Direction direction : path) {
-            try{
-                position = position.createPosition(direction.getX(), direction.getY());
-                route.add(position);
-            } catch (IllegalArgumentException e) {
-                route.clear();
-                break;
+        Position current = source;
+
+        for (Direction direction : path) {
+            if (!current.canMove(direction.getX(), direction.getY())) {
+                return List.of();
             }
+            current = current.createPosition(direction.getX(), direction.getY());
+            route.add(current);
         }
+
         return route;
     }
 }

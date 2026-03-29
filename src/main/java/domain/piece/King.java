@@ -4,7 +4,6 @@ import domain.Direction;
 import domain.Position;
 import domain.Side;
 import domain.strategy.MovementStrategy;
-import domain.strategy.PathMovement;
 
 import java.util.ArrayList;
 import java.util.List;
