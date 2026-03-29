@@ -9,6 +9,18 @@ import java.util.Map;
 
 public class Board {
 
+    private final int BACK_Y = 0;
+    private final int KING_Y = 1;
+    private final int CANNON_Y = 2;
+    private final int SOLDIER_Y = 3;
+
+    private final List<Integer> CANNON_X = List.of(2, 8);
+    private final List<Integer> CHARIOT_X = List.of(1, 9);
+    private final List<Integer> GUARD_X = List.of(4, 6);
+    private final List<Integer> KING_X = List.of(5);
+    private final List<Integer> SOLIDER_X = List.of(1, 3, 5, 7, 9);
+    private final List<Integer> FORMATION_X = List.of(2, 3, 7, 8);
+
     private final Map<Position, Piece> board = new HashMap<>();
 
     public Board(Formation choFormation, Formation hanFormation) {
@@ -16,18 +28,15 @@ public class Board {
     }
 
     public void movePiece(Turn turn, Position sourcePosition, Position targetPosition) {
-        // 보드 출발지에서 기물을 꺼낸다.
         Piece piece = board.get(sourcePosition);
-        // Empty인지 아닌지 확인한다.
+
         if(piece instanceof Empty) {
             throw new IllegalArgumentException("해당 위치에 기물이 존재하지 않습니다.");
         }
-        // 팀인지 확인한다.
         if(!piece.getSide().equals(turn.current())) {
             throw new IllegalArgumentException("선택한 기물은 아군 기물이 아닙니다.");
         }
 
-        // 기물에게 경로를 묻는다.
         List<Position> route = piece.findRoute(sourcePosition, targetPosition);
         List<Piece> pieces = new ArrayList<>();
         for(Position position : route) {
@@ -35,12 +44,9 @@ public class Board {
                 pieces.add(board.get(position));
             }
         }
-
-        // 경로에 있는 기물을 확인하여 이동 가능한 경로인지 확인한다
         piece.checkRoute(pieces);
 
         piece.checkTarget(board.get(targetPosition));
-        // 목적지로 보내고 출발지를 Empty로 채운다.
         board.put(targetPosition, board.get(sourcePosition));
         board.put(sourcePosition, new Empty());
     }
@@ -59,31 +65,14 @@ public class Board {
         placePieces(hanFormation, Side.HAN);
     }
 
-    private void placePieces(Formation hanFormation, Side side) {
-
+    private void placePieces(Formation formation, Side side) {
         List<Integer> rows = getRowForSide(side);
-
-        placePiece(Position.of(1, rows.get(0)), PieceType.CHARIOT.create(side));
-        placePiece(Position.of(9, rows.get(0)), PieceType.CHARIOT.create(side));
-
-        placePiece(Position.of(4, rows.get(0)), PieceType.GUARD.create(side));
-        placePiece(Position.of(6, rows.get(0)), PieceType.GUARD.create(side));
-
-        placePiece(Position.of(5, rows.get(1)), PieceType.KING.create(side));
-
-        placePiece(Position.of(2, rows.get(2)), PieceType.CANNON.create(side));
-        placePiece(Position.of(8, rows.get(2)), PieceType.CANNON.create(side));
-
-        placePiece(Position.of(1, rows.get(3)), PieceType.SOLDIER.create(side));
-        placePiece(Position.of(3, rows.get(3)), PieceType.SOLDIER.create(side));
-        placePiece(Position.of(5, rows.get(3)), PieceType.SOLDIER.create(side));
-        placePiece(Position.of(7, rows.get(3)), PieceType.SOLDIER.create(side));
-        placePiece(Position.of(9, rows.get(3)), PieceType.SOLDIER.create(side));
-
-        placePiece(Position.of(2, rows.get(0)), hanFormation.getPieceTypes().get(0).create(side));
-        placePiece(Position.of(3, rows.get(0)), hanFormation.getPieceTypes().get(1).create(side));
-        placePiece(Position.of(7, rows.get(0)), hanFormation.getPieceTypes().get(2).create(side));
-        placePiece(Position.of(8, rows.get(0)), hanFormation.getPieceTypes().get(3).create(side));
+        placePiece(CANNON_X, rows.get(CANNON_Y), PieceType.CANNON, side);
+        placePiece(CHARIOT_X, rows.get(BACK_Y), PieceType.CHARIOT, side);
+        placePiece(GUARD_X, rows.get(BACK_Y), PieceType.GUARD, side);
+        placePiece(KING_X, rows.get(KING_Y), PieceType.KING, side);
+        placePiece(SOLIDER_X, rows.get(SOLDIER_Y), PieceType.SOLDIER, side);
+        placeFormationPiece(formation, FORMATION_X, rows.get(BACK_Y), side);
     }
 
     private List<Integer> getRowForSide(Side side) {
@@ -95,5 +84,18 @@ public class Board {
 
     private void placePiece(Position position, Piece piece) {
         board.put(position, piece);
+    }
+
+    private void placePiece(List<Integer> xPositions, int y, PieceType pieceType, Side side) {
+        for(int x : xPositions) {
+            board.put(Position.of(x, y), pieceType.create(side));
+        }
+    }
+
+    private void placeFormationPiece(Formation formation, List<Integer> formationX, int y, Side side) {
+        List<PieceType> pieceTypes = formation.getPieceTypes();
+        for(int i = 0; i < pieceTypes.size(); i++) {
+            board.put(Position.of(formationX.get(i), y), pieceTypes.get(i).create(side));
+        }
     }
 }
