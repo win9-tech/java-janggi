@@ -1,9 +1,6 @@
 package controller;
 
-import domain.Board;
-import domain.Formation;
-import domain.Position;
-import domain.Side;
+import domain.*;
 import view.InputView;
 import view.OutputView;
 
@@ -23,18 +20,18 @@ public class JanggiController {
     }
 
     private void processMove(Board board) {
-        Side turn = Side.CHO;
+        Turn turn = new Turn(Side.CHO);
         while (true) {
             outputView.printCurrentTurn(turn);
             Position sourcePosition = readSourcePosition();
             Position targetPosition = readTargetPosition();
             try {
                 board.movePiece(turn, sourcePosition, targetPosition);
-                turn = turn.opposite();
-                outputView.printBoardStatus(board.getBoard());
+                turn.next();
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
             }
+            outputView.printBoardStatus(board.getBoard());
         }
     }
 

@@ -25,7 +25,6 @@ public class Elephant extends Piece {
         for (List<Direction> path : movementStrategy) {
             List<Position> positions = new ArrayList<>();
             Position current = sourcePosition;
-
             try {
                 for (Direction direction : path) {
                     current = current.createPosition(direction.getX(), direction.getY());
@@ -38,7 +37,7 @@ public class Elephant extends Piece {
                 // 경계 벗어남, 다음 경로 시도
             }
         }
-        throw new IllegalArgumentException("이동할 수 없는 목적지입니다.");
+        throw new IllegalArgumentException(INVALID_TARGET_POSITION);
     }
 
     @Override

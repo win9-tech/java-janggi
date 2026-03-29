@@ -4,8 +4,6 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 
 import java.util.Map;
 
@@ -52,20 +50,34 @@ public class BoardTest {
         }
     }
 
-    @ParameterizedTest
-    @CsvSource({
-            "CHO, 1, 4",
-            "HAN, 1, 7"
-    })
-    @DisplayName("자신의 기물이 아닌 경우 이동할 수 없다.")
-    void 자신의_기물이_아닌_경우_이동할_수_없다(Side side, int sourceX, int sourceY) {
+    @DisplayName("초 턴에 한 기물을 선택한 경우 이동할 수 없다.")
+    @Test
+    void 초_턴에_한_기물을_선택한_경우_이동할_수_없다() {
         // given
         Board board = new Board(Formation.from("1"), Formation.from("1"));
-        Position sourcePosition = Position.of(sourceX, sourceY);
+        Turn turn = new Turn(Side.CHO);
+        Position sourcePosition = Position.of(1, 4);
         Position mockPosition = Position.of(1, 1);
 
         // when & then
-        Assertions.assertThatThrownBy(() -> board.movePiece(side, sourcePosition, mockPosition))
+        Assertions.assertThatThrownBy(() -> board.movePiece(turn, sourcePosition, mockPosition))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("선택한 기물은 아군 기물이 아닙니다.");
+
+    }
+
+
+    @DisplayName("한 턴에 초 기물을 선택한 경우 이동할 수 없다.")
+    @Test
+    void 한_턴에_초_기물을_선택한_경우_이동할_수_없다() {
+        // given
+        Board board = new Board(Formation.from("1"), Formation.from("1"));
+        Turn turn = new Turn(Side.HAN);
+        Position sourcePosition = Position.of(1, 7);
+        Position mockPosition = Position.of(1, 1);
+
+        // when & then
+        Assertions.assertThatThrownBy(() -> board.movePiece(turn, sourcePosition, mockPosition))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("선택한 기물은 아군 기물이 아닙니다.");
 
@@ -76,11 +88,12 @@ public class BoardTest {
     void 기물이_존재하지_않는_경우_이동할_수_없다() {
         // given
         Board board = new Board(Formation.from("1"), Formation.from("1"));
+        Turn turn = new Turn(Side.CHO);
         Position sourcePosition = Position.of(5, 5);
         Position mockPosition = Position.of(1, 1);
 
         // when & then
-        Assertions.assertThatThrownBy(() -> board.movePiece(Side.CHO, sourcePosition, mockPosition))
+        Assertions.assertThatThrownBy(() -> board.movePiece(turn, sourcePosition, mockPosition))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("해당 위치에 기물이 존재하지 않습니다.");
     }
@@ -102,7 +115,7 @@ public class BoardTest {
                 Position target = Position.of(1, 3);
 
                 // when
-                board.movePiece(Side.HAN, source, target);
+                board.movePiece(new Turn(Side.HAN), source, target);
 
                 // then
                 assertThat(board.getBoard().get(target)).isInstanceOf(Chariot.class);
@@ -116,10 +129,10 @@ public class BoardTest {
                 Board board = new Board(Formation.from("1"), Formation.from("1"));
                 Position source = Position.of(1, 1);
                 Position target = Position.of(1, 2);
-                board.movePiece(Side.HAN, source, target);
+                board.movePiece(new Turn(Side.HAN), source, target);
 
                 // when
-                board.movePiece(Side.HAN, target, Position.of(3, 2));
+                board.movePiece(new Turn(Side.HAN), target, Position.of(3, 2));
 
                 // then
                 assertThat(board.getBoard().get(Position.of(3, 2))).isInstanceOf(Chariot.class);
@@ -134,7 +147,7 @@ public class BoardTest {
                 Position target = Position.of(3, 3);
 
                 // when & then
-                Assertions.assertThatThrownBy(() -> board.movePiece(Side.HAN, source, target))
+                Assertions.assertThatThrownBy(() -> board.movePiece(new Turn(Side.HAN), source, target))
                         .isInstanceOf(IllegalArgumentException.class);
             }
         }
@@ -152,7 +165,7 @@ public class BoardTest {
                 Position target = Position.of(4, 4);
 
                 // when
-                board.movePiece(Side.HAN, source, target);
+                board.movePiece(new Turn(Side.HAN), source, target);
 
                 // then
                 assertThat(board.getBoard().get(target)).isInstanceOf(Elephant.class);
@@ -168,7 +181,7 @@ public class BoardTest {
                 Position target = Position.of(3, 2);
 
                 // when & then
-                Assertions.assertThatThrownBy(() -> board.movePiece(Side.HAN, source, target))
+                Assertions.assertThatThrownBy(() -> board.movePiece(new Turn(Side.HAN), source, target))
                         .isInstanceOf(IllegalArgumentException.class);
             }
         }
@@ -186,7 +199,7 @@ public class BoardTest {
                 Position target = Position.of(3, 3);
 
                 // when
-                board.movePiece(Side.HAN, source, target);
+                board.movePiece(new Turn(Side.HAN), source, target);
 
                 // then
                 assertThat(board.getBoard().get(target)).isInstanceOf(Horse.class);
@@ -202,7 +215,7 @@ public class BoardTest {
                 Position target = Position.of(4, 4);
 
                 // when & then
-                Assertions.assertThatThrownBy(() -> board.movePiece(Side.HAN, source, target))
+                Assertions.assertThatThrownBy(() -> board.movePiece(new Turn(Side.HAN), source, target))
                         .isInstanceOf(IllegalArgumentException.class);
             }
         }
@@ -217,11 +230,11 @@ public class BoardTest {
                 // given
                 Board board = new Board(Formation.from("1"), Formation.from("1"));
                 // 사(4,1)를 (4,3)으로 이동시켜 포가 뛰어넘을 기물 배치
-                board.movePiece(Side.HAN, Position.of(4, 1), Position.of(4, 2));
-                board.movePiece(Side.HAN, Position.of(4, 2), Position.of(4, 3));
+                board.movePiece(new Turn(Side.HAN), Position.of(4, 1), Position.of(4, 2));
+                board.movePiece(new Turn(Side.HAN), Position.of(4, 2), Position.of(4, 3));
 
                 // when - (2,3) 포가 (4,3) 사를 뛰어넘어 (5,3)으로 이동
-                board.movePiece(Side.HAN, Position.of(2, 3), Position.of(5, 3));
+                board.movePiece(new Turn(Side.HAN), Position.of(2, 3), Position.of(5, 3));
 
                 // then
                 assertThat(board.getBoard().get(Position.of(5, 3))).isInstanceOf(Cannon.class);
@@ -236,7 +249,7 @@ public class BoardTest {
                 Position target = Position.of(5, 3);
 
                 // when & then - 중간에 기물이 없음
-                Assertions.assertThatThrownBy(() -> board.movePiece(Side.HAN, source, target))
+                Assertions.assertThatThrownBy(() -> board.movePiece(new Turn(Side.HAN), source, target))
                         .isInstanceOf(IllegalArgumentException.class);
             }
 
@@ -246,14 +259,14 @@ public class BoardTest {
                 // given
                 Board board = new Board(Formation.from("1"), Formation.from("1"));
                 // (8,3) 포를 (5,3)으로 이동하기 위해 먼저 중간에 기물 배치
-                board.movePiece(Side.HAN, Position.of(6, 1), Position.of(6, 2));
-                board.movePiece(Side.HAN, Position.of(6, 2), Position.of(6, 3));
+                board.movePiece(new Turn(Side.HAN), Position.of(6, 1), Position.of(6, 2));
+                board.movePiece(new Turn(Side.HAN), Position.of(6, 2), Position.of(6, 3));
                 // (8,3) 포가 (6,3) 사를 뛰어넘어 (5,3)으로 이동
-                board.movePiece(Side.HAN, Position.of(8, 3), Position.of(5, 3));
+                board.movePiece(new Turn(Side.HAN), Position.of(8, 3), Position.of(5, 3));
 
                 // 이제 (2,3) 포와 (5,3) 포 사이에 (5,3) 포를 뛰어넘는 상황 만들기
                 // (2,3) 포가 (5,3) 포를 뛰어넘어 (7,3)으로 이동 시도
-                Assertions.assertThatThrownBy(() -> board.movePiece(Side.HAN, Position.of(2, 3), Position.of(7, 3)))
+                Assertions.assertThatThrownBy(() -> board.movePiece(new Turn(Side.HAN), Position.of(2, 3), Position.of(7, 3)))
                         .isInstanceOf(IllegalArgumentException.class)
                         .hasMessageContaining("포를 넘어갈 수 없습니다.");
             }
@@ -272,7 +285,7 @@ public class BoardTest {
                 Position target = Position.of(5, 1);
 
                 // when
-                board.movePiece(Side.HAN, source, target);
+                board.movePiece(new Turn(Side.HAN), source, target);
 
                 // then
                 assertThat(board.getBoard().get(target)).isInstanceOf(Guard.class);
@@ -288,7 +301,7 @@ public class BoardTest {
                 Position target = Position.of(4, 3);
 
                 // when & then
-                Assertions.assertThatThrownBy(() -> board.movePiece(Side.HAN, source, target))
+                Assertions.assertThatThrownBy(() -> board.movePiece(new Turn(Side.HAN), source, target))
                         .isInstanceOf(IllegalArgumentException.class);
             }
         }
@@ -306,7 +319,7 @@ public class BoardTest {
                 Position target = Position.of(5, 1);
 
                 // when
-                board.movePiece(Side.HAN, source, target);
+                board.movePiece(new Turn(Side.HAN), source, target);
 
                 // then
                 assertThat(board.getBoard().get(target)).isInstanceOf(King.class);
@@ -322,7 +335,7 @@ public class BoardTest {
                 Position target = Position.of(5, 4);
 
                 // when & then
-                Assertions.assertThatThrownBy(() -> board.movePiece(Side.HAN, source, target))
+                Assertions.assertThatThrownBy(() -> board.movePiece(new Turn(Side.HAN), source, target))
                         .isInstanceOf(IllegalArgumentException.class);
             }
         }
@@ -340,7 +353,7 @@ public class BoardTest {
                 Position target = Position.of(1, 6);
 
                 // when
-                board.movePiece(Side.CHO, source, target);
+                board.movePiece(new Turn(Side.CHO), source, target);
 
                 // then
                 assertThat(board.getBoard().get(target)).isInstanceOf(Soldier.class);
@@ -356,7 +369,7 @@ public class BoardTest {
                 Position target = Position.of(1, 5);
 
                 // when
-                board.movePiece(Side.HAN, source, target);
+                board.movePiece(new Turn(Side.HAN), source, target);
 
                 // then
                 assertThat(board.getBoard().get(target)).isInstanceOf(Soldier.class);
@@ -372,7 +385,7 @@ public class BoardTest {
                 Position target = Position.of(2, 7);
 
                 // when
-                board.movePiece(Side.CHO, source, target);
+                board.movePiece(new Turn(Side.CHO), source, target);
 
                 // then
                 assertThat(board.getBoard().get(target)).isInstanceOf(Soldier.class);
@@ -387,7 +400,7 @@ public class BoardTest {
                 Position target = Position.of(1, 8);
 
                 // when & then
-                Assertions.assertThatThrownBy(() -> board.movePiece(Side.CHO, source, target))
+                Assertions.assertThatThrownBy(() -> board.movePiece(new Turn(Side.CHO), source, target))
                         .isInstanceOf(IllegalArgumentException.class);
             }
         }
@@ -402,9 +415,9 @@ public class BoardTest {
                 // given
                 Board board = new Board(Formation.from("1"), Formation.from("1"));
                 // 차를 이동시켜 적 졸을 잡기
-                board.movePiece(Side.HAN, Position.of(1, 1), Position.of(1, 5));
+                board.movePiece(new Turn(Side.HAN), Position.of(1, 1), Position.of(1, 5));
                 // (1,5)에서 (1,7) CHO 졸 잡기
-                board.movePiece(Side.HAN, Position.of(1, 5), Position.of(1, 7));
+                board.movePiece(new Turn(Side.HAN), Position.of(1, 5), Position.of(1, 7));
 
                 // then
                 assertThat(board.getBoard().get(Position.of(1, 7))).isInstanceOf(Chariot.class);
@@ -420,7 +433,7 @@ public class BoardTest {
                 Position target = Position.of(1, 4); // HAN 졸 위치
 
                 // when & then
-                Assertions.assertThatThrownBy(() -> board.movePiece(Side.HAN, source, target))
+                Assertions.assertThatThrownBy(() -> board.movePiece(new Turn(Side.HAN), source, target))
                         .isInstanceOf(IllegalArgumentException.class)
                         .hasMessageContaining("아군 기물은 잡을 수 없습니다.");
             }

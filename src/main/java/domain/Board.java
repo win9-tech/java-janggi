@@ -15,7 +15,7 @@ public class Board {
         createBoard(choFormation, hanFormation);
     }
 
-    public void movePiece(Side side, Position sourcePosition, Position targetPosition) {
+    public void movePiece(Turn turn, Position sourcePosition, Position targetPosition) {
         // 보드 출발지에서 기물을 꺼낸다.
         Piece piece = board.get(sourcePosition);
         // Empty인지 아닌지 확인한다.
@@ -23,7 +23,7 @@ public class Board {
             throw new IllegalArgumentException("해당 위치에 기물이 존재하지 않습니다.");
         }
         // 팀인지 확인한다.
-        if(!piece.getSide().equals(side)) {
+        if(!piece.getSide().equals(turn.current())) {
             throw new IllegalArgumentException("선택한 기물은 아군 기물이 아닙니다.");
         }
 
