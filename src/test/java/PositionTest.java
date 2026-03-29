@@ -19,7 +19,7 @@ public class PositionTest {
             // when & then
             Assertions.assertThatThrownBy(() -> Position.of(x, y))
                     .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessageContaining("y 좌표는 1~10, x 좌표는 1~9 사이여야 합니다.");
+                    .hasMessageContaining("x 좌표는 1~9, y 좌표는 1~10, 사이여야 합니다.");
         }
     }
 }

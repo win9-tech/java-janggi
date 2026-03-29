@@ -1,9 +1,11 @@
 package domain;
 
-import java.util.Objects;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Position {
 
+    private static final Map<Integer, Position> CACHE = new HashMap<>();
     private final int x;
     private final int y;
 
@@ -14,26 +16,7 @@ public class Position {
 
     public static Position of(int x, int y) {
         validateOutOfRange(x, y);
-        return new Position(x, y);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Position position = (Position) o;
-        return x == position.x && y == position.y;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(x) * 31 + Objects.hashCode(y);
-    }
-
-    private static void validateOutOfRange(int x, int y) {
-        if(!((1 <= x && x <= 9) && (1 <= y && y <= 10))) {
-            throw new IllegalArgumentException("y 좌표는 1~10, x 좌표는 1~9 사이여야 합니다.");
-        }
+        return CACHE.computeIfAbsent(x * 100 + y, k -> new Position(x, y));
     }
 
     public boolean canMove(int dx, int dy) {
@@ -44,5 +27,11 @@ public class Position {
 
     public Position createPosition(int dx, int dy) {
         return Position.of(x + dx, y + dy);
+    }
+
+    private static void validateOutOfRange(int x, int y) {
+        if(!((1 <= x && x <= 9) && (1 <= y && y <= 10))) {
+            throw new IllegalArgumentException("x 좌표는 1~9, y 좌표는 1~10, 사이여야 합니다.");
+        }
     }
 }
