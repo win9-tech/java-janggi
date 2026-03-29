@@ -7,8 +7,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class ChariotTest {
 
     @ParameterizedTest
@@ -25,7 +23,7 @@ class ChariotTest {
         // given
         Position sourcePosition = Position.of(sourceX, sourceY);
         Position targetPosition = Position.of(targetX, targetY);
-        Piece piece = new Chariot(side);
+        Piece piece = PieceType.CHARIOT.create(Side.CHO);
 
         // when & then
         if (expected) {

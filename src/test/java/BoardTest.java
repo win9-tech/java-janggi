@@ -414,10 +414,10 @@ public class BoardTest {
             void 적_기물을_잡을_수_있다() {
                 // given
                 Board board = new Board(Formation.from("1"), Formation.from("1"));
+
                 // 차를 이동시켜 적 졸을 잡기
-                board.movePiece(new Turn(Side.HAN), Position.of(1, 1), Position.of(1, 5));
-                // (1,5)에서 (1,7) CHO 졸 잡기
-                board.movePiece(new Turn(Side.HAN), Position.of(1, 5), Position.of(1, 7));
+                board.movePiece(new Turn(Side.HAN), Position.of(1, 4), Position.of(2, 4));
+                board.movePiece(new Turn(Side.HAN), Position.of(1, 1), Position.of(1, 7));
 
                 // then
                 assertThat(board.getBoard().get(Position.of(1, 7))).isInstanceOf(Chariot.class);

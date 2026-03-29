@@ -2,6 +2,7 @@ package domain.piece;
 
 import domain.Position;
 import domain.Side;
+import domain.strategy.PathMovement;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,7 +14,7 @@ class PieceTest {
     static class TestPiece extends Piece{
 
         public TestPiece() {
-            super(Side.CHO);
+            super(Side.CHO, new PathMovement());
         }
 
         @Override
@@ -35,10 +36,8 @@ class PieceTest {
         List<Piece> pieces = List.of(new Empty(), new Empty());
         // when
         Piece piece = new TestPiece();
-        boolean actual = piece.checkRoute(pieces);
-
+        Assertions.assertThatCode(() -> piece.checkRoute(pieces))
+                .doesNotThrowAnyException();
         // then
-        boolean expected = true;
-        Assertions.assertThat(actual).isEqualTo(expected);
     }
 }

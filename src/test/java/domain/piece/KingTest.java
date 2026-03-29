@@ -25,7 +25,7 @@ class KingTest {
         // given
         Position sourcePosition = Position.of(sourceX, sourceY);
         Position targetPosition = Position.of(targetX, targetY);
-        Piece piece = new King(side);
+        Piece piece = PieceType.KING.create(side);
 
         // when & then
         if (pass) {

@@ -25,7 +25,7 @@ class HorseTest {
         // given
         Position sourcePosition = Position.of(sourceX, sourceY);
         Position targetPosition = Position.of(targetX, targetY);
-        Piece piece = new Horse(side);
+        Piece piece = PieceType.HORSE.create(Side.CHO);
 
         // when & then
         if (pass) {

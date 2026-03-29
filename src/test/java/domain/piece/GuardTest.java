@@ -26,7 +26,7 @@ class GuardTest {
         // given
         Position sourcePosition = Position.of(sourceX, sourceY);
         Position targetPosition = Position.of(targetX, targetY);
-        Piece piece = new Guard(side);
+        Piece piece = PieceType.GUARD.create(side);
 
         // when & then
         if (expected) {

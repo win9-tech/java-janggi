@@ -22,7 +22,7 @@ class CannonTest {
         // given
         Position sourcePosition = Position.of(1,1);
         Position targetPosition = Position.of(1,5);
-        Piece piece = new Cannon(Side.HAN);
+        Piece piece = PieceType.CANNON.create(Side.HAN);
 
         // when
         List<Position> positions = piece.findRoute(sourcePosition, targetPosition);
@@ -40,7 +40,7 @@ class CannonTest {
         // given
         Position sourcePosition = Position.of(1,1);
         Position targetPosition = Position.of(2,5);
-        Piece piece = new Cannon(Side.CHO);
+        Piece piece = PieceType.CANNON.create(Side.CHO);
 
         // when & then
         Assertions.assertThatThrownBy(() -> piece.findRoute(sourcePosition, targetPosition))
@@ -52,21 +52,19 @@ class CannonTest {
     @Test
     void 포_이동_경로에_포를_제외한_기물이_하나_존재해야_한다() {
         // given
-        List<Piece> pieces = List.of(new Empty(), new Horse(Side.CHO), new Empty());
+        List<Piece> pieces = List.of(new Empty(), PieceType.HORSE.create(Side.CHO), new Empty());
         // when
-        Piece cannon = new Cannon(Side.CHO);
-        boolean actual = cannon.checkRoute(pieces);
-        // then
-        boolean expected = true;
-        Assertions.assertThat(actual).isEqualTo(expected);
+        Piece cannon = PieceType.CANNON.create(Side.CHO);
+        Assertions.assertThatCode(() -> cannon.checkRoute(pieces))
+                .doesNotThrowAnyException();
     }
 
     @DisplayName("포 이동 경로에 포가 존재하면 예외를 발생한다.")
     @Test
     void 포_이동_경로에_포가_존재하면_예외를_발생한다() {
         // given
-        List<Piece> pieces = List.of(new Empty(), new Cannon(Side.CHO), new Empty());
-        Piece cannon = new Cannon(Side.CHO);
+        List<Piece> pieces = List.of(new Empty(), PieceType.CANNON.create(Side.CHO), new Empty());
+        Piece cannon = PieceType.CANNON.create(Side.CHO);
 
         // when & then
         Assertions.assertThatThrownBy(() -> cannon.checkRoute(pieces))
@@ -78,8 +76,8 @@ class CannonTest {
     @Test
     void 포_이동_경로에_기물이_두_개_이상_존재하면_예외를_발생한다() {
         // given
-        List<Piece> pieces = List.of(new Empty(), new Horse(Side.CHO), new Elephant(Side.CHO));
-        Piece cannon = new Cannon(Side.CHO);
+        List<Piece> pieces = List.of(PieceType.EMPTY.create(Side.NONE), PieceType.HORSE.create(Side.CHO), PieceType.ELEPHANT.create(Side.CHO));
+        Piece cannon = PieceType.CANNON.create(Side.HAN);
 
         // when & then
         Assertions.assertThatThrownBy(() -> cannon.checkRoute(pieces))

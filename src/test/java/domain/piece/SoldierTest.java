@@ -25,7 +25,7 @@ class SoldierTest {
         // given
         Position sourcePosition = Position.of(sourceX, sourceY);
         Position targetPosition = Position.of(targetX, targetY);
-        Piece piece = new Soldier(side);
+        Piece piece = PieceType.SOLDIER.create(side);
 
         // when & then
         if (pass) {
