@@ -14,17 +14,17 @@ public class Board {
     private static final String PIECE_NOT_FOUND = "해당 위치에 기물이 존재하지 않습니다.";
     private static final String NOT_OWN_PIECE = "선택한 기물은 아군 기물이 아닙니다.";
 
-    private final int BACK_Y = 0;
-    private final int KING_Y = 1;
-    private final int CANNON_Y = 2;
-    private final int SOLDIER_Y = 3;
+    private static final int BACK_Y = 0;
+    private static final int KING_Y = 1;
+    private static final int CANNON_Y = 2;
+    private static final int SOLDIER_Y = 3;
 
-    private final List<Integer> CANNON_X = List.of(2, 8);
-    private final List<Integer> CHARIOT_X = List.of(1, 9);
-    private final List<Integer> GUARD_X = List.of(4, 6);
-    private final List<Integer> KING_X = List.of(5);
-    private final List<Integer> SOLIDER_X = List.of(1, 3, 5, 7, 9);
-    private final List<Integer> FORMATION_X = List.of(2, 3, 7, 8);
+    private static final List<Integer> CANNON_X = List.of(2, 8);
+    private static final List<Integer> CHARIOT_X = List.of(1, 9);
+    private static final List<Integer> GUARD_X = List.of(4, 6);
+    private static final List<Integer> KING_X = List.of(5);
+    private static final List<Integer> SOLIDER_X = List.of(1, 3, 5, 7, 9);
+    private static final List<Integer> FORMATION_X = List.of(2, 3, 7, 8);
 
     private final Map<Position, Piece> board = new HashMap<>();
 
@@ -67,7 +67,7 @@ public class Board {
         placePiece(GUARD_X, rows.get(BACK_Y), PieceType.GUARD, side);
         placePiece(KING_X, rows.get(KING_Y), PieceType.KING, side);
         placePiece(SOLIDER_X, rows.get(SOLDIER_Y), PieceType.SOLDIER, side);
-        placeFormationPiece(formation, FORMATION_X, rows.get(BACK_Y), side);
+        placeFormationPiece(formation, rows.get(BACK_Y), side);
     }
 
     private List<Integer> getRowForSide(Side side) {
@@ -87,10 +87,10 @@ public class Board {
         }
     }
 
-    private void placeFormationPiece(Formation formation, List<Integer> formationX, int y, Side side) {
+    private void placeFormationPiece(Formation formation, int y, Side side) {
         List<PieceType> pieceTypes = formation.getPieceTypes();
         for(int i = 0; i < pieceTypes.size(); i++) {
-            board.put(Position.of(formationX.get(i), y), pieceTypes.get(i).create(side));
+            board.put(Position.of(FORMATION_X.get(i), y), pieceTypes.get(i).create(side));
         }
     }
 
