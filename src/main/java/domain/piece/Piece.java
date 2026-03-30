@@ -43,5 +43,9 @@ public abstract class Piece {
         }
     }
 
+    public void validateExists() {
+        // 존재하는 기물은 검증 통과
+    }
+
     public abstract String getName();
 }
