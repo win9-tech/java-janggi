@@ -24,7 +24,7 @@ public class PositionTest {
     }
 
     @Nested
-    class CamMoveTest {
+    class CanMoveTest {
 
         @ParameterizedTest
         @CsvSource({
