@@ -26,16 +26,15 @@ public class Elephant extends Piece {
         for (List<Direction> path : paths) {
             List<Position> positions = new ArrayList<>();
             Position current = sourcePosition;
-            try {
-                for (Direction direction : path) {
-                    current = current.createPosition(direction.getX(), direction.getY());
-                    positions.add(current);
+            for (Direction direction : path) {
+                if (!current.canMove(direction.getX(), direction.getY())) {
+                    break;
                 }
-                if (current.equals(targetPosition)) {
-                    return positions;
-                }
-            } catch (IllegalArgumentException e) {
-                // 경계 벗어남, 다음 경로 시도
+                current = current.createPosition(direction.getX(), direction.getY());
+                positions.add(current);
+            }
+            if (positions.size() == path.size() && current.equals(targetPosition)) {
+                return positions;
             }
         }
         throw new IllegalArgumentException(INVALID_TARGET_POSITION);

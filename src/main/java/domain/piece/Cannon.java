@@ -27,7 +27,6 @@ public class Cannon extends Piece {
 
     @Override
     public void checkRoute(List<Piece> pieces) {
-        // 목적지까지는 포가아닌 기물이 한 개만 있어야 함.
         int cnt = 0;
         for(Piece piece : pieces) {
             if(piece instanceof Cannon) {

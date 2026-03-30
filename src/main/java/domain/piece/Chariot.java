@@ -23,18 +23,13 @@ public class Chariot extends Piece {
         for (List<Direction> path : paths) {
             List<Position> positions = new ArrayList<>();
             Direction direction = path.getFirst();
-            Position position = sourcePosition;
+            Position current = sourcePosition;
 
-            while (true) {
-                try {
-                    Position nextPosition = position.createPosition(direction.getX(), direction.getY());
-                    positions.add(nextPosition);
-                    if (nextPosition.equals(targetPosition)) {
-                        return positions;
-                    }
-                    position = nextPosition;
-                } catch (IllegalArgumentException e) {
-                    break;
+            while (current.canMove(direction.getX(), direction.getY())) {
+                current = current.createPosition(direction.getX(), direction.getY());
+                positions.add(current);
+                if (current.equals(targetPosition)) {
+                    return positions;
                 }
             }
         }

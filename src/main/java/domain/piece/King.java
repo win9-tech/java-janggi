@@ -5,7 +5,6 @@ import domain.Position;
 import domain.Side;
 import domain.strategy.MovementStrategy;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class King extends Piece {
@@ -20,19 +19,16 @@ public class King extends Piece {
 
     @Override
     public List<Position> findRoute(Position sourcePosition, Position targetPosition) {
-        List<Position> positions = new ArrayList<>();
         for(List<Direction> path : paths) {
             for(Direction direction : path) {
-                try{
-                    positions.add(sourcePosition.createPosition(direction.getX(), direction.getY()));
-                } catch (IllegalArgumentException e) {
-                    break;
+                if (!sourcePosition.canMove(direction.getX(), direction.getY())) {
+                    continue;
+                }
+                Position next = sourcePosition.createPosition(direction.getX(), direction.getY());
+                if (next.equals(targetPosition)) {
+                    return List.of(next);
                 }
             }
-            if(positions.contains(targetPosition)) {
-                return List.copyOf(positions);
-            }
-            positions.clear();
         }
         throw new IllegalArgumentException(INVALID_TARGET_POSITION);
     }
