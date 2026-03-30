@@ -70,8 +70,7 @@ public class JanggiController {
     private Formation readChoFormation() {
         while(true) {
             try {
-                String choFormation = inputView.readChoFormation();
-                return Formation.from(choFormation);
+                return inputView.readChoFormation();
             } catch (IllegalArgumentException e) {
                 outputView.printErrorMessage(e.getMessage());
             }
@@ -81,8 +80,7 @@ public class JanggiController {
     private Formation readHanFormation() {
         while(true) {
             try {
-                String hanFormation = inputView.readHanFormation();
-                return Formation.from(hanFormation);
+                return inputView.readHanFormation();
             } catch (IllegalArgumentException e) {
                 outputView.printErrorMessage(e.getMessage());
             }

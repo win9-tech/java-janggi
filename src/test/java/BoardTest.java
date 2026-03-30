@@ -18,7 +18,7 @@ public class BoardTest {
         @DisplayName("초나라 포진을 상마마상으로 배치한다.")
         @Test
         void 초나라_포진을_상마마상으로_배치한다() {
-            Board board = new Board(Formation.from("1"), Formation.from("2"));
+            Board board = new Board(Formation.상마마상, Formation.마상상마);
             Map<Position, Piece> pieces = board.getBoard();
 
             assertThat(pieces.get(Position.of(2, 10))).isInstanceOf(Elephant.class);
@@ -30,7 +30,7 @@ public class BoardTest {
         @DisplayName("한나라 포진을 마상마상으로 배치한다.")
         @Test
         void 한나라_포진을_마상마상으로_배치한다() {
-            Board board = new Board(Formation.from("1"), Formation.from("4"));
+            Board board = new Board(Formation.상마마상, Formation.마상마상);
             Map<Position, Piece> pieces = board.getBoard();
 
             assertThat(pieces.get(Position.of(2, 1))).isInstanceOf(Horse.class);
@@ -42,7 +42,7 @@ public class BoardTest {
         @DisplayName("각 궁이 올바른 진영에 배치된다.")
         @Test
         void 각_궁이_올바른_진영에_배치된다() {
-            Board board = new Board(Formation.from("1"), Formation.from("2"));
+            Board board = new Board(Formation.상마마상, Formation.마상상마);
             Map<Position, Piece> pieces = board.getBoard();
 
             assertThat(pieces.get(Position.of(5, 2)).isSameSide(Side.HAN)).isTrue();
@@ -54,7 +54,7 @@ public class BoardTest {
     @Test
     void 초_턴에_한_기물을_선택한_경우_이동할_수_없다() {
         // given
-        Board board = new Board(Formation.from("1"), Formation.from("1"));
+        Board board = new Board(Formation.상마마상, Formation.상마마상);
         Turn turn = new Turn(Side.CHO);
         Position sourcePosition = Position.of(1, 4);
         Position mockPosition = Position.of(1, 1);
@@ -71,7 +71,7 @@ public class BoardTest {
     @Test
     void 한_턴에_초_기물을_선택한_경우_이동할_수_없다() {
         // given
-        Board board = new Board(Formation.from("1"), Formation.from("1"));
+        Board board = new Board(Formation.상마마상, Formation.상마마상);
         Turn turn = new Turn(Side.HAN);
         Position sourcePosition = Position.of(1, 7);
         Position mockPosition = Position.of(1, 1);
@@ -87,7 +87,7 @@ public class BoardTest {
     @Test
     void 기물이_존재하지_않는_경우_이동할_수_없다() {
         // given
-        Board board = new Board(Formation.from("1"), Formation.from("1"));
+        Board board = new Board(Formation.상마마상, Formation.상마마상);
         Turn turn = new Turn(Side.CHO);
         Position sourcePosition = Position.of(5, 5);
         Position mockPosition = Position.of(1, 1);
@@ -110,7 +110,7 @@ public class BoardTest {
             @DisplayName("차가 세로로 이동한다.")
             void 차가_세로로_이동한다() {
                 // given
-                Board board = new Board(Formation.from("1"), Formation.from("1"));
+                Board board = new Board(Formation.상마마상, Formation.상마마상);
                 Position source = Position.of(1, 1);
                 Position target = Position.of(1, 3);
 
@@ -126,7 +126,7 @@ public class BoardTest {
             @DisplayName("차가 가로로 이동한다.")
             void 차가_가로로_이동한다() {
                 // given
-                Board board = new Board(Formation.from("1"), Formation.from("1"));
+                Board board = new Board(Formation.상마마상, Formation.상마마상);
                 Position source = Position.of(1, 1);
                 Position target = Position.of(1, 2);
                 board.movePiece(new Turn(Side.HAN), source, target);
@@ -142,7 +142,7 @@ public class BoardTest {
             @DisplayName("차가 대각선으로 이동하면 예외가 발생한다.")
             void 차가_대각선으로_이동하면_예외가_발생한다() {
                 // given
-                Board board = new Board(Formation.from("1"), Formation.from("1"));
+                Board board = new Board(Formation.상마마상, Formation.상마마상);
                 Position source = Position.of(1, 1);
                 Position target = Position.of(3, 3);
 
@@ -160,7 +160,7 @@ public class BoardTest {
             @DisplayName("상이 대각선 방향으로 이동한다.")
             void 상이_대각선_방향으로_이동한다() {
                 // given - 상마상마 포진 사용
-                Board board = new Board(Formation.from("1"), Formation.from("1"));
+                Board board = new Board(Formation.상마마상, Formation.상마마상);
                 Position source = Position.of(2, 1);
                 Position target = Position.of(4, 4);
 
@@ -176,7 +176,7 @@ public class BoardTest {
             @DisplayName("상이 이동 불가능한 위치로 이동하면 예외가 발생한다.")
             void 상이_이동_불가능한_위치로_이동하면_예외가_발생한다() {
                 // given
-                Board board = new Board(Formation.from("1"), Formation.from("1"));
+                Board board = new Board(Formation.상마마상, Formation.상마마상);
                 Position source = Position.of(2, 1);
                 Position target = Position.of(3, 2);
 
@@ -194,7 +194,7 @@ public class BoardTest {
             @DisplayName("마가 날 일자로 이동한다.")
             void 마가_날_일자로_이동한다() {
                 // given - 마상마상 포진 사용 (2,1에 마가 있음)
-                Board board = new Board(Formation.from("1"), Formation.from("4"));
+                Board board = new Board(Formation.상마마상, Formation.마상마상);
                 Position source = Position.of(2, 1);
                 Position target = Position.of(3, 3);
 
@@ -210,7 +210,7 @@ public class BoardTest {
             @DisplayName("마가 이동 불가능한 위치로 이동하면 예외가 발생한다.")
             void 마가_이동_불가능한_위치로_이동하면_예외가_발생한다() {
                 // given
-                Board board = new Board(Formation.from("1"), Formation.from("4"));
+                Board board = new Board(Formation.상마마상, Formation.마상마상);
                 Position source = Position.of(2, 1);
                 Position target = Position.of(4, 4);
 
@@ -228,7 +228,7 @@ public class BoardTest {
             @DisplayName("포가 기물을 하나 뛰어넘어 이동한다.")
             void 포가_기물을_하나_뛰어넘어_이동한다() {
                 // given
-                Board board = new Board(Formation.from("1"), Formation.from("1"));
+                Board board = new Board(Formation.상마마상, Formation.상마마상);
                 // 사(4,1)를 (4,3)으로 이동시켜 포가 뛰어넘을 기물 배치
                 board.movePiece(new Turn(Side.HAN), Position.of(4, 1), Position.of(4, 2));
                 board.movePiece(new Turn(Side.HAN), Position.of(4, 2), Position.of(4, 3));
@@ -244,7 +244,7 @@ public class BoardTest {
             @DisplayName("포가 뛰어넘을 기물이 없으면 예외가 발생한다.")
             void 포가_뛰어넘을_기물이_없으면_예외가_발생한다() {
                 // given
-                Board board = new Board(Formation.from("1"), Formation.from("1"));
+                Board board = new Board(Formation.상마마상, Formation.상마마상);
                 Position source = Position.of(2, 3);
                 Position target = Position.of(5, 3);
 
@@ -257,7 +257,7 @@ public class BoardTest {
             @DisplayName("포가 포를 뛰어넘으면 예외가 발생한다.")
             void 포가_포를_뛰어넘으면_예외가_발생한다() {
                 // given
-                Board board = new Board(Formation.from("1"), Formation.from("1"));
+                Board board = new Board(Formation.상마마상, Formation.상마마상);
                 // (8,3) 포를 (5,3)으로 이동하기 위해 먼저 중간에 기물 배치
                 board.movePiece(new Turn(Side.HAN), Position.of(6, 1), Position.of(6, 2));
                 board.movePiece(new Turn(Side.HAN), Position.of(6, 2), Position.of(6, 3));
@@ -280,7 +280,7 @@ public class BoardTest {
             @DisplayName("사가 한 칸 이동한다.")
             void 사가_한_칸_이동한다() {
                 // given
-                Board board = new Board(Formation.from("1"), Formation.from("1"));
+                Board board = new Board(Formation.상마마상, Formation.상마마상);
                 Position source = Position.of(4, 1);
                 Position target = Position.of(5, 1);
 
@@ -296,7 +296,7 @@ public class BoardTest {
             @DisplayName("사가 두 칸 이상 이동하면 예외가 발생한다.")
             void 사가_두_칸_이상_이동하면_예외가_발생한다() {
                 // given
-                Board board = new Board(Formation.from("1"), Formation.from("1"));
+                Board board = new Board(Formation.상마마상, Formation.상마마상);
                 Position source = Position.of(4, 1);
                 Position target = Position.of(4, 3);
 
@@ -314,7 +314,7 @@ public class BoardTest {
             @DisplayName("궁이 한 칸 이동한다.")
             void 궁이_한_칸_이동한다() {
                 // given
-                Board board = new Board(Formation.from("1"), Formation.from("1"));
+                Board board = new Board(Formation.상마마상, Formation.상마마상);
                 Position source = Position.of(5, 2);
                 Position target = Position.of(5, 1);
 
@@ -330,7 +330,7 @@ public class BoardTest {
             @DisplayName("궁이 두 칸 이상 이동하면 예외가 발생한다.")
             void 궁이_두_칸_이상_이동하면_예외가_발생한다() {
                 // given
-                Board board = new Board(Formation.from("1"), Formation.from("1"));
+                Board board = new Board(Formation.상마마상, Formation.상마마상);
                 Position source = Position.of(5, 2);
                 Position target = Position.of(5, 4);
 
@@ -348,7 +348,7 @@ public class BoardTest {
             @DisplayName("졸이 앞으로 한 칸 이동한다.")
             void 졸이_앞으로_한_칸_이동한다() {
                 // given - CHO 졸은 위로 이동
-                Board board = new Board(Formation.from("1"), Formation.from("1"));
+                Board board = new Board(Formation.상마마상, Formation.상마마상);
                 Position source = Position.of(1, 7);
                 Position target = Position.of(1, 6);
 
@@ -364,7 +364,7 @@ public class BoardTest {
             @DisplayName("병이 앞으로 한 칸 이동한다.")
             void 병이_앞으로_한_칸_이동한다() {
                 // given - HAN 병은 아래로 이동
-                Board board = new Board(Formation.from("1"), Formation.from("1"));
+                Board board = new Board(Formation.상마마상, Formation.상마마상);
                 Position source = Position.of(1, 4);
                 Position target = Position.of(1, 5);
 
@@ -380,7 +380,7 @@ public class BoardTest {
             @DisplayName("졸이 옆으로 한 칸 이동한다.")
             void 졸이_옆으로_한_칸_이동한다() {
                 // given
-                Board board = new Board(Formation.from("1"), Formation.from("1"));
+                Board board = new Board(Formation.상마마상, Formation.상마마상);
                 Position source = Position.of(1, 7);
                 Position target = Position.of(2, 7);
 
@@ -395,7 +395,7 @@ public class BoardTest {
             @DisplayName("졸이 뒤로 이동하면 예외가 발생한다.")
             void 졸이_뒤로_이동하면_예외가_발생한다() {
                 // given - CHO 졸은 아래로 이동 불가
-                Board board = new Board(Formation.from("1"), Formation.from("1"));
+                Board board = new Board(Formation.상마마상, Formation.상마마상);
                 Position source = Position.of(1, 7);
                 Position target = Position.of(1, 8);
 
@@ -413,7 +413,7 @@ public class BoardTest {
             @DisplayName("적 기물을 잡을 수 있다.")
             void 적_기물을_잡을_수_있다() {
                 // given
-                Board board = new Board(Formation.from("1"), Formation.from("1"));
+                Board board = new Board(Formation.상마마상, Formation.상마마상);
 
                 // 차를 이동시켜 적 졸을 잡기
                 board.movePiece(new Turn(Side.HAN), Position.of(1, 4), Position.of(2, 4));
@@ -428,7 +428,7 @@ public class BoardTest {
             @DisplayName("아군 기물을 잡으면 예외가 발생한다.")
             void 아군_기물을_잡으면_예외가_발생한다() {
                 // given
-                Board board = new Board(Formation.from("1"), Formation.from("1"));
+                Board board = new Board(Formation.상마마상, Formation.상마마상);
                 Position source = Position.of(1, 1);
                 Position target = Position.of(1, 4); // HAN 졸 위치
 
