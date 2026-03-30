@@ -16,22 +16,46 @@ public class JanggiController {
 
     public void run() {
         Board board = initBoard();
-        processMove(board);
+        playGame(board);
     }
 
-    private void processMove(Board board) {
+    private void playGame(Board board) {
         Turn turn = new Turn(Side.CHO);
         while (true) {
             outputView.printCurrentTurn(turn);
-            Position sourcePosition = readSourcePosition();
-            Position targetPosition = readTargetPosition();
+            TurnAction action = readTurnAction();
+            executeAction(turn, board, action);
+        }
+    }
+
+    private void executeAction(Turn turn, Board board, TurnAction action) {
+        if (action == TurnAction.PASS) {
+            turn.next();
+            outputView.printBoardStatus(board.getBoard());
+            return;
+        }
+        move(board, turn);
+        outputView.printBoardStatus(board.getBoard());
+    }
+
+    private void move(Board board, Turn turn) {
+        Position sourcePosition = readSourcePosition();
+        Position targetPosition = readTargetPosition();
+        try {
+            board.movePiece(turn, sourcePosition, targetPosition);
+            turn.next();
+        } catch (IllegalArgumentException e) {
+            outputView.printErrorMessage(e.getMessage());
+        }
+    }
+
+    private TurnAction readTurnAction() {
+        while (true) {
             try {
-                board.movePiece(turn, sourcePosition, targetPosition);
-                turn.next();
+                return inputView.readTurnAction();
             } catch (IllegalArgumentException e) {
                 outputView.printErrorMessage(e.getMessage());
             }
-            outputView.printBoardStatus(board.getBoard());
         }
     }
 
@@ -40,7 +64,7 @@ public class JanggiController {
             try {
                 int x = inputView.readTargetXPosition();
                 int y = inputView.readTargetYPosition();
-                return Position.of(x,y);
+                return Position.of(x, y);
             } catch (IllegalArgumentException e) {
                 outputView.printErrorMessage(e.getMessage());
             }
@@ -52,7 +76,7 @@ public class JanggiController {
             try {
                 int x = inputView.readSourceXPosition();
                 int y = inputView.readSourceYPosition();
-                return Position.of(x,y);
+                return Position.of(x, y);
             } catch (IllegalArgumentException e) {
                 outputView.printErrorMessage(e.getMessage());
             }
@@ -60,15 +84,15 @@ public class JanggiController {
     }
 
     private Board initBoard() {
-        Formation choformation = readChoFormation();
-        Formation hanformation = readHanFormation();
-        Board board = new Board(choformation, hanformation);
+        Formation choFormation = readChoFormation();
+        Formation hanFormation = readHanFormation();
+        Board board = new Board(choFormation, hanFormation);
         outputView.printBoardStatus(board.getBoard());
         return board;
     }
 
     private Formation readChoFormation() {
-        while(true) {
+        while (true) {
             try {
                 return inputView.readChoFormation();
             } catch (IllegalArgumentException e) {
@@ -78,7 +102,7 @@ public class JanggiController {
     }
 
     private Formation readHanFormation() {
-        while(true) {
+        while (true) {
             try {
                 return inputView.readHanFormation();
             } catch (IllegalArgumentException e) {
