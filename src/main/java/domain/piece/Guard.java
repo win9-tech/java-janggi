@@ -10,7 +10,7 @@ import java.util.List;
 
 public class Guard extends Piece {
 
-    private final List<List<Direction>> movementStrategy = List.of(
+    private final List<List<Direction>> paths = List.of(
             List.of(Direction.UP), List.of(Direction.DOWN), List.of(Direction.RIGHT), List.of(Direction.LEFT)
     );
 
@@ -21,7 +21,7 @@ public class Guard extends Piece {
     @Override
     public List<Position> findRoute(Position sourcePosition, Position targetPosition) {
         List<Position> positions = new ArrayList<>();
-        for(List<Direction> path : movementStrategy) {
+        for(List<Direction> path : paths) {
             for(Direction direction : path) {
                 try{
                     positions.add(sourcePosition.createPosition(direction.getX(), direction.getY()));
