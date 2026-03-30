@@ -44,10 +44,7 @@ public class Cannon extends Piece {
 
     @Override
     public void checkTarget(Piece piece) {
-        if(piece.getSide().equals(side)) {
-            throw new IllegalArgumentException(CANNOT_CAPTURE_OWN_PIECE);
-        }
-
+        super.checkTarget(piece);
         if(piece instanceof Cannon) {
             throw new IllegalArgumentException(CANNOT_CAPTURE_CANNON_WITH_CANNON);
         }
