@@ -1,6 +1,7 @@
 package view;
 
 import domain.Formation;
+
 import java.util.Scanner;
 
 public class InputView {

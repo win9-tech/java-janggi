@@ -1,6 +1,8 @@
 package domain;
 
-import domain.piece.*;
+import domain.piece.Empty;
+import domain.piece.Piece;
+import domain.piece.PieceType;
 
 import java.util.ArrayList;
 import java.util.HashMap;

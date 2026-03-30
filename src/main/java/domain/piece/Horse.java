@@ -3,9 +3,7 @@ package domain.piece;
 import domain.Direction;
 import domain.Position;
 import domain.Side;
-import domain.strategy.LinearMovement;
 import domain.strategy.MovementStrategy;
-import domain.strategy.PathMovement;
 
 import java.util.List;
 
