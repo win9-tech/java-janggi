@@ -7,7 +7,7 @@ import java.util.List;
 
 public abstract class MovementStrategy {
 
-    protected final String INVALID_TARGET_POSITION = "이동할 수 없는 목적지입니다.";
+    protected static final String INVALID_TARGET_POSITION = "이동할 수 없는 목적지입니다.";
 
     public List<Position> findRoute(List<List<Direction>> paths, Position sourcePosition, Position targetPosition) {
         for(List<Direction> path: paths) {

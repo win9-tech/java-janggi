@@ -12,7 +12,7 @@ public class Cannon extends Piece {
     private static final String CANNOT_JUMP_WITH_CANNON = "포를 넘어갈 수 없습니다.";
     private static final String CANNOT_CAPTURE_CANNON_WITH_CANNON = "포는 포끼리 잡을 수 없습니다.";
 
-    private final List<List<Direction>> paths = List.of(
+    private static final List<List<Direction>> paths = List.of(
             List.of(Direction.UP), List.of(Direction.DOWN), List.of(Direction.RIGHT), List.of(Direction.LEFT));
 
     public Cannon(Side side, MovementStrategy movementStrategy) {

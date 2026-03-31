@@ -10,7 +10,7 @@ import java.util.List;
 
 public class Chariot extends Piece {
 
-    private final List<List<Direction>> paths = List.of(
+    private static final List<List<Direction>> paths = List.of(
             List.of(Direction.UP), List.of(Direction.DOWN), List.of(Direction.RIGHT), List.of(Direction.LEFT)
     );
 

@@ -10,7 +10,7 @@ import java.util.List;
 
 public class Elephant extends Piece {
 
-    private final List<List<Direction>> paths = List.of(
+    private static final List<List<Direction>> paths = List.of(
             List.of(Direction.UP, Direction.UP_LEFT, Direction.UP_LEFT), List.of(Direction.UP, Direction.UP_RIGHT, Direction.UP_RIGHT),
             List.of(Direction.RIGHT, Direction.UP_RIGHT, Direction.UP_RIGHT), List.of(Direction.RIGHT, Direction.DOWN_RIGHT, Direction.DOWN_RIGHT),
             List.of(Direction.DOWN, Direction.DOWN_LEFT, Direction.DOWN_LEFT), List.of(Direction.DOWN, Direction.DOWN_RIGHT, Direction.DOWN_RIGHT),
