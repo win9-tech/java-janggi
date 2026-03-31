@@ -10,6 +10,7 @@ public abstract class Piece {
 
     protected static final String CANNOT_CAPTURE_OWN_PIECE = "아군 기물은 잡을 수 없습니다.";
     protected static final String INVALID_TARGET_POSITION = "이동할 수 없는 목적지입니다.";
+    protected static final String ROUTE_BLOCKED = "이동 경로가 막혀있습니다.";
 
     protected final Side side;
     protected final MovementStrategy movementStrategy;
@@ -36,7 +37,7 @@ public abstract class Piece {
     public void checkRoute(List<Piece> pieces) {
         for(Piece piece : pieces) {
             if(!(piece.isEmpty())) {
-                throw new IllegalArgumentException(CANNOT_CAPTURE_OWN_PIECE);
+                throw new IllegalArgumentException(ROUTE_BLOCKED);
             }
         }
     }
