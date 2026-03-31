@@ -10,6 +10,7 @@ public class InputView {
     private static final String READ_FORMATION_MESSAGE = "[%s] 포진을 선택해주세요.";
     private static final String INVALID_FORMATION_RANGE = "번호는 1~4 사이의 숫자여야 합니다.";
     private static final String INVALID_TURN_ACTION_RANGE = "1 또는 2를 입력해주세요.";
+    private static final String INVALID_NUMBER_FORMAT = "유효한 숫자를 입력해주세요.";
 
     private final Scanner scanner = new Scanner(System.in);
 
@@ -71,23 +72,31 @@ public class InputView {
     public int readSourceXPosition() {
         System.out.println();
         System.out.println("움직일 기물의 x 좌표를 입력해주세요. (x 범위 1 ~ 9)");
-        return scanner.nextInt();
+        return parseCoordinate(scanner.nextLine());
     }
 
     public int readSourceYPosition() {
         System.out.println("움직일 기물의 y 좌표를 입력해주세요. (y 범위 1 ~ 10)");
-        return scanner.nextInt();
+        return parseCoordinate(scanner.nextLine());
     }
 
     public int readTargetXPosition() {
         System.out.println();
         System.out.println("목적지 x 좌표를 입력해주세요. (x 범위 1 ~ 9)");
-        return scanner.nextInt();
+        return parseCoordinate(scanner.nextLine());
     }
 
     public int readTargetYPosition() {
         System.out.println("목적지 y 좌표를 입력해주세요. (y 범위 1 ~ 10)");
-        return scanner.nextInt();
+        return parseCoordinate(scanner.nextLine());
+    }
+
+    private int parseCoordinate(String input) {
+        try {
+            return Integer.parseInt(input);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException(INVALID_NUMBER_FORMAT);
+        }
     }
 
     private String readFormationMenu() {
