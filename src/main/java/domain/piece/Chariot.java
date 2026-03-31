@@ -5,7 +5,6 @@ import domain.Position;
 import domain.Side;
 import domain.strategy.MovementStrategy;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Chariot extends Piece {

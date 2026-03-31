@@ -12,7 +12,7 @@ public abstract class MovementStrategy {
     public List<Position> findRoute(List<List<Direction>> paths, Position sourcePosition, Position targetPosition) {
         for(List<Direction> path: paths) {
             List<Position> positions = buildRoute(path, sourcePosition, targetPosition);
-            if(positions.contains(targetPosition)) {
+            if(!positions.isEmpty() && positions.getLast().equals(targetPosition)) {
                 return positions;
             }
         }

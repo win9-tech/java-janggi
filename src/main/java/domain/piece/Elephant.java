@@ -5,7 +5,6 @@ import domain.Position;
 import domain.Side;
 import domain.strategy.PathMovement;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Elephant extends Piece {
