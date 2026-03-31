@@ -33,19 +33,23 @@ public abstract class Piece {
         }
     }
 
-    public abstract List<Position> findRoute(Position sourcePosition, Position targetPosition);
-
     public void checkRoute(List<Piece> pieces) {
         for(Piece piece : pieces) {
-            if(!(piece instanceof Empty)) {
+            if(!(piece.isEmpty())) {
                 throw new IllegalArgumentException(CANNOT_CAPTURE_OWN_PIECE);
             }
         }
     }
 
-    public void validateExists() {
-        // 존재하는 기물은 검증 통과
+    public boolean isEmpty() {
+        return false;
     }
+
+    public boolean isCannon() {
+        return false;
+    }
+
+    public abstract List<Position> findRoute(Position sourcePosition, Position targetPosition);
 
     public abstract String getName();
 }

@@ -13,6 +13,7 @@ public class Board {
 
 
     private static final String NOT_OWN_PIECE = "선택한 기물은 아군 기물이 아닙니다.";
+    private static final String PIECE_NOT_FOUND = "해당 위치에 기물이 존재하지 않습니다.";
 
     private static final int BACK_Y = 0;
     private static final int KING_Y = 1;
@@ -95,7 +96,9 @@ public class Board {
     }
 
     private void validatePieceExists(Piece piece) {
-        piece.validateExists();
+        if(piece.isEmpty()) {
+            throw new IllegalArgumentException(PIECE_NOT_FOUND);
+        }
     }
 
     private void findPiecesOnRoute(Piece piece, List<Position> route, Position targetPosition) {

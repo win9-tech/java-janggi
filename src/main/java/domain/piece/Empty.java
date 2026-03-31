@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Empty extends Piece{
 
-    private static final String PIECE_NOT_FOUND = "해당 위치에 기물이 존재하지 않습니다.";
+
 
     public Empty() {
         super(Side.NONE, null);
@@ -19,9 +19,10 @@ public class Empty extends Piece{
     }
 
     @Override
-    public void validateExists() {
-        throw new IllegalArgumentException(PIECE_NOT_FOUND);
+    public boolean isEmpty() {
+        return true;
     }
+
 
     @Override
     public String getName() {

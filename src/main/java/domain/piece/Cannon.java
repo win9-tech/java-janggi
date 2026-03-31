@@ -20,7 +20,6 @@ public class Cannon extends Piece {
         super(side, movementStrategy);
     }
 
-
     @Override
     public List<Position> findRoute(Position sourcePosition, Position targetPosition) {
         return movementStrategy.findRoute(paths, sourcePosition, targetPosition);
@@ -30,10 +29,10 @@ public class Cannon extends Piece {
     public void checkRoute(List<Piece> pieces) {
         int jumpedPieceCount = 0;
         for(Piece piece : pieces) {
-            if(piece instanceof Cannon) {
+            if(piece.isCannon()) {
                 throw new IllegalArgumentException(CANNOT_JUMP_WITH_CANNON);
             }
-            if(!(piece instanceof Empty)) {
+            if(!(piece.isEmpty())) {
                 jumpedPieceCount++;
             }
         }
@@ -45,10 +44,16 @@ public class Cannon extends Piece {
     @Override
     public void checkTarget(Piece piece) {
         super.checkTarget(piece);
-        if(piece instanceof Cannon) {
+        if(piece.isCannon()) {
             throw new IllegalArgumentException(CANNOT_CAPTURE_CANNON_WITH_CANNON);
         }
     }
+
+    @Override
+    public boolean isCannon() {
+        return true;
+    }
+
 
     @Override
     public String getName() {
