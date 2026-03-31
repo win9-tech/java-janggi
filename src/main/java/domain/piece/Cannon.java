@@ -11,6 +11,7 @@ public class Cannon extends Piece {
 
     private static final String CANNOT_JUMP_WITH_CANNON = "포를 넘어갈 수 없습니다.";
     private static final String CANNOT_CAPTURE_CANNON_WITH_CANNON = "포는 포끼리 잡을 수 없습니다.";
+    private static final String MUST_JUMP_EXACTLY_ONE = "포는 정확히 하나의 기물을 넘어야 합니다.";
 
     private static final List<List<Direction>> paths = List.of(
             List.of(Direction.UP), List.of(Direction.DOWN), List.of(Direction.RIGHT), List.of(Direction.LEFT));
@@ -27,17 +28,17 @@ public class Cannon extends Piece {
 
     @Override
     public void checkRoute(List<Piece> pieces) {
-        int cnt = 0;
+        int jumpedPieceCount = 0;
         for(Piece piece : pieces) {
             if(piece instanceof Cannon) {
                 throw new IllegalArgumentException(CANNOT_JUMP_WITH_CANNON);
             }
             if(!(piece instanceof Empty)) {
-                cnt++;
+                jumpedPieceCount++;
             }
         }
-        if(cnt != 1) {
-            throw new IllegalArgumentException(INVALID_TARGET_POSITION);
+        if(jumpedPieceCount != 1) {
+            throw new IllegalArgumentException(MUST_JUMP_EXACTLY_ONE);
         }
     }
 

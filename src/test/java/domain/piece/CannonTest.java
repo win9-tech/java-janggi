@@ -76,6 +76,6 @@ class CannonTest {
         // when & then
         Assertions.assertThatThrownBy(() -> cannon.checkRoute(pieces))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("이동할 수 없는 목적지입니다.");
+                .hasMessageContaining("포는 정확히 하나의 기물을 넘어야 합니다.");
     }
 }
