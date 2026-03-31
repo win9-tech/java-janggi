@@ -20,20 +20,7 @@ public class Chariot extends Piece {
 
     @Override
     public List<Position> findRoute(Position sourcePosition, Position targetPosition) {
-        for (List<Direction> path : paths) {
-            List<Position> positions = new ArrayList<>();
-            Direction direction = path.getFirst();
-            Position current = sourcePosition;
-
-            while (current.canMove(direction.getX(), direction.getY())) {
-                current = current.createPosition(direction.getX(), direction.getY());
-                positions.add(current);
-                if (current.equals(targetPosition)) {
-                    return positions;
-                }
-            }
-        }
-        throw new IllegalArgumentException(INVALID_TARGET_POSITION);
+        return movementStrategy.findRoute(paths, sourcePosition, targetPosition);
     }
 
     @Override

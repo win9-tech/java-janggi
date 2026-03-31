@@ -23,21 +23,7 @@ public class Elephant extends Piece {
 
     @Override
     public List<Position> findRoute(Position sourcePosition, Position targetPosition) {
-        for (List<Direction> path : paths) {
-            List<Position> positions = new ArrayList<>();
-            Position current = sourcePosition;
-            for (Direction direction : path) {
-                if (!current.canMove(direction.getX(), direction.getY())) {
-                    break;
-                }
-                current = current.createPosition(direction.getX(), direction.getY());
-                positions.add(current);
-            }
-            if (positions.size() == path.size() && current.equals(targetPosition)) {
-                return positions;
-            }
-        }
-        throw new IllegalArgumentException(INVALID_TARGET_POSITION);
+        return movementStrategy.findRoute(paths, sourcePosition, targetPosition);
     }
 
     @Override

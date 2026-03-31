@@ -19,18 +19,7 @@ public class Guard extends Piece {
 
     @Override
     public List<Position> findRoute(Position sourcePosition, Position targetPosition) {
-        for(List<Direction> path : paths) {
-            for(Direction direction : path) {
-                if (!sourcePosition.canMove(direction.getX(), direction.getY())) {
-                    continue;
-                }
-                Position next = sourcePosition.createPosition(direction.getX(), direction.getY());
-                if (next.equals(targetPosition)) {
-                    return List.of(next);
-                }
-            }
-        }
-        throw new IllegalArgumentException(INVALID_TARGET_POSITION);
+        return movementStrategy.findRoute(paths, sourcePosition, targetPosition);
     }
 
     @Override

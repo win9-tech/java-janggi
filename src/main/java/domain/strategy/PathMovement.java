@@ -20,7 +20,6 @@ public class PathMovement extends MovementStrategy{
             current = current.createPosition(direction.getX(), direction.getY());
             route.add(current);
         }
-
         return route;
     }
 }
