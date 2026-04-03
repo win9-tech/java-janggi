@@ -27,6 +27,9 @@ public class Horse extends Piece {
 
     @Override
     public String getName() {
-        return "마";
+        if (isSameSide(Side.CHO)) {
+            return "马";
+        }
+        return "馬";
     }
 }

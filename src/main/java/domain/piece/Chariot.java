@@ -24,6 +24,9 @@ public class Chariot extends Piece {
 
     @Override
     public String getName() {
-        return "차";
+        if (isSameSide(Side.CHO)) {
+            return "车";
+        }
+        return "車";
     }
 }

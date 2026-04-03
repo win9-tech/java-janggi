@@ -24,6 +24,9 @@ public class King extends Piece {
 
     @Override
     public String getName() {
-        return "왕";
+        if (isSameSide(Side.CHO)) {
+            return "楚";
+        }
+        return "漢";
     }
 }

@@ -32,8 +32,8 @@ public class Soldier extends Piece {
     @Override
     public String getName() {
         if (isSameSide(Side.CHO)) {
-            return "졸";
+            return "卒";
         }
-        return "병";
+        return "兵";
     }
 }

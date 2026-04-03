@@ -27,6 +27,6 @@ public class Elephant extends Piece {
 
     @Override
     public String getName() {
-        return "상";
+        return "象";
     }
 }

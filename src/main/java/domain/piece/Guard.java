@@ -24,6 +24,6 @@ public class Guard extends Piece {
 
     @Override
     public String getName() {
-        return "사";
+        return "士";
     }
 }

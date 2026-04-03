@@ -55,6 +55,6 @@ public class Cannon extends Piece {
 
     @Override
     public String getName() {
-        return "포";
+        return "包";
     }
 }
