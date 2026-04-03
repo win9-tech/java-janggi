@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static constant.BoardConstant.*;
 import static constant.ErrorMessage.NOT_OWN_PIECE;
 import static constant.ErrorMessage.PIECE_NOT_FOUND;
 
@@ -51,8 +52,8 @@ public class Board {
     }
 
     private void createBoard(Formation choFormation, Formation hanFormation) {
-        for (int x = 1; x <= 9; x++) {
-            for (int y = 1; y <= 10; y++) {
+        for (int x = MIN_X; x <= MAX_X; x++) {
+            for (int y = MIN_Y; y <= MAX_Y; y++) {
                 placePiece(Position.of(x, y), PieceType.EMPTY.create(Side.NONE));
             }
         }

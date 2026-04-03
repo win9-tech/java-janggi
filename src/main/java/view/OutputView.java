@@ -7,6 +7,7 @@ import domain.piece.Piece;
 
 import java.util.Map;
 
+import static constant.BoardConstant.*;
 import static constant.ErrorMessage.ERROR_PREFIX;
 
 public class OutputView {
@@ -19,9 +20,9 @@ public class OutputView {
         System.out.println();
         System.out.println("    1  2  3  4  5  6  7  8  9");
 
-        for (int y = 1; y <= 10; y++) {
+        for (int y = MIN_Y; y <= MAX_Y; y++) {
             printRowNumber(y);
-            for (int x = 1; x <= 9; x++) {
+            for (int x = MIN_X; x <= MAX_X; x++) {
                 Piece piece = board.get(Position.of(x, y));
                 printPiece(piece);
             }
