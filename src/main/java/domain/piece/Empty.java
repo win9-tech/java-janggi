@@ -5,9 +5,9 @@ import domain.Side;
 
 import java.util.List;
 
+import static constant.ErrorMessage.INVALID_TARGET_POSITION;
+
 public class Empty extends Piece{
-
-
 
     public Empty() {
         super(Side.NONE, null);

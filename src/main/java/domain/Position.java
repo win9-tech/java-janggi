@@ -3,9 +3,9 @@ package domain;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Position {
+import static constant.ErrorMessage.INVALID_POSITION_RANGE;
 
-    private static final String INVALID_POSITION_RANGE = "x 좌표는 1~9, y 좌표는 1~10, 사이여야 합니다.";
+public class Position {
 
     private static final Map<Integer, Position> CACHE = new HashMap<>();
     private final int x;

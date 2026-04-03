@@ -6,11 +6,10 @@ import domain.strategy.MovementStrategy;
 
 import java.util.List;
 
-public abstract class Piece {
+import static constant.ErrorMessage.CANNOT_CAPTURE_OWN_PIECE;
+import static constant.ErrorMessage.ROUTE_BLOCKED;
 
-    protected static final String CANNOT_CAPTURE_OWN_PIECE = "아군 기물은 잡을 수 없습니다.";
-    protected static final String INVALID_TARGET_POSITION = "이동할 수 없는 목적지입니다.";
-    protected static final String ROUTE_BLOCKED = "이동 경로가 막혀있습니다.";
+public abstract class Piece {
 
     protected final Side side;
     protected final MovementStrategy movementStrategy;

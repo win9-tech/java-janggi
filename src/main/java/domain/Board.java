@@ -9,11 +9,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static constant.ErrorMessage.NOT_OWN_PIECE;
+import static constant.ErrorMessage.PIECE_NOT_FOUND;
+
 public class Board {
-
-
-    private static final String NOT_OWN_PIECE = "선택한 기물은 아군 기물이 아닙니다.";
-    private static final String PIECE_NOT_FOUND = "해당 위치에 기물이 존재하지 않습니다.";
 
     private static final int BACK_Y = 0;
     private static final int KING_Y = 1;

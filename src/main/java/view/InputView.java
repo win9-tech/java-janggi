@@ -5,12 +5,9 @@ import domain.TurnAction;
 
 import java.util.Scanner;
 
-public class InputView {
+import static constant.ErrorMessage.*;
 
-    private static final String READ_FORMATION_MESSAGE = "[%s] 포진을 선택해주세요.";
-    private static final String INVALID_FORMATION_RANGE = "번호는 1~4 사이의 숫자여야 합니다.";
-    private static final String INVALID_TURN_ACTION_RANGE = "1 또는 2를 입력해주세요.";
-    private static final String INVALID_NUMBER_FORMAT = "유효한 숫자를 입력해주세요.";
+public class InputView {
 
     private final Scanner scanner = new Scanner(System.in);
 

@@ -7,12 +7,13 @@ import domain.piece.Piece;
 
 import java.util.Map;
 
+import static constant.ErrorMessage.ERROR_PREFIX;
+
 public class OutputView {
 
     private static final String RED = "\u001B[31m";
     private static final String BLUE = "\u001B[34m";
     private static final String RESET = "\u001B[0m";
-    private static final String ERROR_PREFIX = "[ERROR] ";
 
     public void printBoardStatus(Map<Position, Piece> board) {
         System.out.println();

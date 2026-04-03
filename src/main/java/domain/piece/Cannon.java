@@ -7,11 +7,9 @@ import domain.strategy.MovementStrategy;
 
 import java.util.List;
 
-public class Cannon extends Piece {
+import static constant.ErrorMessage.*;
 
-    private static final String CANNOT_JUMP_WITH_CANNON = "포를 넘어갈 수 없습니다.";
-    private static final String CANNOT_CAPTURE_CANNON_WITH_CANNON = "포는 포끼리 잡을 수 없습니다.";
-    private static final String MUST_JUMP_EXACTLY_ONE = "포는 정확히 하나의 기물을 넘어야 합니다.";
+public class Cannon extends Piece {
 
     private static final List<List<Direction>> paths = List.of(
             List.of(Direction.UP), List.of(Direction.DOWN), List.of(Direction.RIGHT), List.of(Direction.LEFT));
