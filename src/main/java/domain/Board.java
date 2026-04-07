@@ -10,8 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import static constant.BoardConstant.*;
-import static constant.ErrorMessage.NOT_OWN_PIECE;
-import static constant.ErrorMessage.PIECE_NOT_FOUND;
+import static constant.ErrorMessage.*;
 
 public class Board {
 
@@ -33,18 +32,20 @@ public class Board {
         createBoard(choFormation, hanFormation);
     }
 
-    public void movePiece(Turn turn, Position sourcePosition, Position targetPosition) {
+    public List<Position> findPath(Position sourcePosition, Turn turn) {
         Piece piece = board.get(sourcePosition);
-
         validatePieceExists(piece);
         validateOwnPiece(piece, turn);
+        return filterValidTargets(piece, sourcePosition);
+    }
 
-        List<Position> route = piece.findRoute(sourcePosition, targetPosition);
-        findPiecesOnRoute(piece, route, targetPosition);
-
-        validateAvailableTarget(piece, targetPosition);
-        board.put(targetPosition, board.get(sourcePosition));
-        board.put(sourcePosition, new Empty());
+    public void movePiece(Position source, Position target, List<Position> availableTargets) {
+        if (!availableTargets.contains(target)) {
+            throw new IllegalArgumentException(INVALID_TARGET_POSITION);
+        }
+        Piece piece = board.get(source);
+        board.put(target, piece);
+        board.put(source, new Empty());
     }
 
     public Map<Position, Piece> getBoard() {
@@ -95,29 +96,44 @@ public class Board {
         }
     }
 
+    private List<Position> filterValidTargets(Piece piece, Position source) {
+        List<Position> allTargets = piece.findRoute(source);
+        List<Position> validTargets = new ArrayList<>();
+        for (Position target : allTargets) {
+            if (isValidMove(piece, source, target)) {
+                validTargets.add(target);
+            }
+        }
+        return validTargets;
+    }
+
+    private boolean isValidMove(Piece piece, Position source, Position target) {
+        List<Piece> piecesOnPath = collectPiecesOnPath(piece, source, target);
+        if (!piece.isValidRoute(piecesOnPath)) {
+            return false;
+        }
+        Piece targetPiece = board.get(target);
+        return piece.isValidTarget(targetPiece);
+    }
+
+    private List<Piece> collectPiecesOnPath(Piece piece, Position source, Position target) {
+        List<Position> path = piece.findPathTo(source, target);
+        List<Piece> pieces = new ArrayList<>();
+        for (Position position : path) {
+            pieces.add(board.get(position));
+        }
+        return pieces;
+    }
+
     private void validatePieceExists(Piece piece) {
         if(piece.isEmpty()) {
             throw new IllegalArgumentException(PIECE_NOT_FOUND);
         }
     }
 
-    private void findPiecesOnRoute(Piece piece, List<Position> route, Position targetPosition) {
-        List<Piece> pieces = new ArrayList<>();
-        for(Position position : route) {
-            if(!position.equals(targetPosition)) {
-                pieces.add(board.get(position));
-            }
-        }
-        piece.checkRoute(pieces);
-    }
-
     private void validateOwnPiece(Piece piece, Turn turn) {
-        if(!piece.getSide().equals(turn.current())) {
+        if (!piece.getSide().equals(turn.current())) {
             throw new IllegalArgumentException(NOT_OWN_PIECE);
         }
-    }
-
-    private void validateAvailableTarget(Piece piece, Position targetPosition) {
-        piece.checkTarget(board.get(targetPosition));
     }
 }
