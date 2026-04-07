@@ -1,31 +1,43 @@
 package domain.piece;
 
 import domain.Direction;
+import domain.Palace;
 import domain.Position;
 import domain.Side;
 import domain.strategy.MovementStrategy;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static constant.ErrorMessage.*;
 
 public class Cannon extends Piece {
 
-    private static final List<List<Direction>> paths = List.of(
-            List.of(Direction.UP), List.of(Direction.DOWN), List.of(Direction.RIGHT), List.of(Direction.LEFT));
+    private static final List<List<Direction>> PATHS = List.of(
+            List.of(Direction.UP), List.of(Direction.DOWN),
+            List.of(Direction.RIGHT), List.of(Direction.LEFT)
+    );
 
     public Cannon(Side side, MovementStrategy movementStrategy) {
         super(side, movementStrategy);
     }
 
     @Override
-    public List<Position> findRoute(Position sourcePosition) {
-        return movementStrategy.findRoute(paths, sourcePosition);
+    public List<Position> findRoute(Position source) {
+        Palace palace = Palace.getInstance();
+        List<Position> routes = new ArrayList<>(movementStrategy.findRoute(PATHS, source));
+        if (palace.isInPalace(source)) {
+            routes.addAll(palace.findDiagonalRoutes(source));
+        }
+        return routes;
     }
 
     @Override
     public List<Position> findPathTo(Position source, Position target) {
-        return movementStrategy.findPathTo(paths, source, target);
+        if (source.isDiagonalTo(target)) {
+            return Palace.getInstance().findDiagonalPathTo(source, target);
+        }
+        return movementStrategy.findPathTo(PATHS, source, target);
     }
 
     @Override
@@ -74,7 +86,6 @@ public class Cannon extends Piece {
     public boolean isCannon() {
         return true;
     }
-
 
     @Override
     public String getName() {

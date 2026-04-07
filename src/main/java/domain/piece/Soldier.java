@@ -1,37 +1,62 @@
 package domain.piece;
 
 import domain.Direction;
+import domain.Palace;
 import domain.Position;
 import domain.Side;
 import domain.strategy.MovementStrategy;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Soldier extends Piece {
 
-    private final List<List<Direction>> paths;
+    private final List<List<Direction>> PATHS;
 
     public Soldier(Side side, MovementStrategy movementStrategy) {
         super(side, movementStrategy);
-        if(Side.CHO == side) {
-            paths = List.of(
+        if (Side.CHO == side) {
+            PATHS = List.of(
                     List.of(Direction.UP), List.of(Direction.RIGHT), List.of(Direction.LEFT)
             );
             return;
         }
-        paths = List.of(
+        PATHS = List.of(
                 List.of(Direction.DOWN), List.of(Direction.RIGHT), List.of(Direction.LEFT)
         );
     }
 
     @Override
-    public List<Position> findRoute(Position sourcePosition) {
-        return movementStrategy.findRoute(paths, sourcePosition);
+    public List<Position> findRoute(Position source) {
+        List<List<Direction>> paths = buildPaths(source);
+        return movementStrategy.findRoute(paths, source);
     }
 
     @Override
     public List<Position> findPathTo(Position source, Position target) {
+        List<List<Direction>> paths = buildPaths(source);
         return movementStrategy.findPathTo(paths, source, target);
+    }
+
+    private List<List<Direction>> buildPaths(Position source) {
+        Palace palace = Palace.getInstance();
+        if (!palace.isInPalace(source)) {
+            return PATHS;
+        }
+        List<List<Direction>> paths = new ArrayList<>(PATHS);
+        for (Direction direction : palace.getDirections(source)) {
+            if (isForwardDiagonal(direction)) {
+                paths.add(List.of(direction));
+            }
+        }
+        return paths;
+    }
+
+    private boolean isForwardDiagonal(Direction direction) {
+        if (isSameSide(Side.CHO)) {
+            return direction == Direction.UP_LEFT || direction == Direction.UP_RIGHT;
+        }
+        return direction == Direction.DOWN_LEFT || direction == Direction.DOWN_RIGHT;
     }
 
     @Override
