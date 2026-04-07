@@ -19,30 +19,53 @@ public class Cannon extends Piece {
     }
 
     @Override
-    public List<Position> findRoute(Position sourcePosition, Position targetPosition) {
-        return movementStrategy.findRoute(paths, sourcePosition, targetPosition);
+    public List<Position> findRoute(Position sourcePosition) {
+        return movementStrategy.findRoute(paths, sourcePosition);
+    }
+
+    @Override
+    public List<Position> findPathTo(Position source, Position target) {
+        return movementStrategy.findPathTo(paths, source, target);
     }
 
     @Override
     public void checkRoute(List<Piece> pieces) {
-        int jumpedPieceCount = 0;
-        for(Piece piece : pieces) {
-            if(piece.isCannon()) {
+        for (Piece piece : pieces) {
+            if (piece.isCannon()) {
                 throw new IllegalArgumentException(CANNOT_JUMP_WITH_CANNON);
             }
-            if(!(piece.isEmpty())) {
-                jumpedPieceCount++;
-            }
         }
-        if(jumpedPieceCount != 1) {
+        if (!isValidRoute(pieces)) {
             throw new IllegalArgumentException(MUST_JUMP_EXACTLY_ONE);
         }
     }
 
     @Override
-    public void checkTarget(Piece piece) {
-        super.checkTarget(piece);
-        if(piece.isCannon()) {
+    public boolean isValidRoute(List<Piece> pieces) {
+        int jumpedPieceCount = 0;
+        for (Piece piece : pieces) {
+            if (piece.isCannon()) {
+                return false;
+            }
+            if (!piece.isEmpty()) {
+                jumpedPieceCount++;
+            }
+        }
+        return jumpedPieceCount == 1;
+    }
+
+    @Override
+    public boolean isValidTarget(Piece targetPiece) {
+        if (targetPiece.isCannon()) {
+            return false;
+        }
+        return super.isValidTarget(targetPiece);
+    }
+
+    @Override
+    public void checkTarget(Piece targetPiece) {
+        super.checkTarget(targetPiece);
+        if (targetPiece.isCannon()) {
             throw new IllegalArgumentException(CANNOT_CAPTURE_CANNON_WITH_CANNON);
         }
     }

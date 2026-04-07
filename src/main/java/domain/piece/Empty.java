@@ -14,7 +14,12 @@ public class Empty extends Piece{
     }
 
     @Override
-    public List<Position> findRoute(Position sourcePosition, Position targetPosition) {
+    public List<Position> findRoute(Position sourcePosition) {
+        throw new IllegalArgumentException(INVALID_TARGET_POSITION);
+    }
+
+    @Override
+    public List<Position> findPathTo(Position source, Position target) {
         throw new IllegalArgumentException(INVALID_TARGET_POSITION);
     }
 

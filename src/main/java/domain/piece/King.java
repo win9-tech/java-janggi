@@ -18,8 +18,13 @@ public class King extends Piece {
     }
 
     @Override
-    public List<Position> findRoute(Position sourcePosition, Position targetPosition) {
-        return movementStrategy.findRoute(paths, sourcePosition, targetPosition);
+    public List<Position> findRoute(Position sourcePosition) {
+        return movementStrategy.findRoute(paths, sourcePosition);
+    }
+
+    @Override
+    public List<Position> findPathTo(Position source, Position target) {
+        return movementStrategy.findPathTo(paths, source, target);
     }
 
     @Override

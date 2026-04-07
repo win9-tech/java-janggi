@@ -27,17 +27,28 @@ public abstract class Piece {
         return side;
     }
 
-    public void checkTarget(Piece piece) {
-        if(side.equals(piece.side)) {
-            throw new IllegalArgumentException(CANNOT_CAPTURE_OWN_PIECE);
+    public boolean isValidRoute(List<Piece> piecesOnPath) {
+        for (Piece piece : piecesOnPath) {
+            if (!piece.isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isValidTarget(Piece targetPiece) {
+        return !targetPiece.isSameSide(this.side);
+    }
+
+    public void checkRoute(List<Piece> piecesOnPath) {
+        if (!isValidRoute(piecesOnPath)) {
+            throw new IllegalArgumentException(ROUTE_BLOCKED);
         }
     }
 
-    public void checkRoute(List<Piece> pieces) {
-        for(Piece piece : pieces) {
-            if(!(piece.isEmpty())) {
-                throw new IllegalArgumentException(ROUTE_BLOCKED);
-            }
+    public void checkTarget(Piece targetPiece) {
+        if (side.equals(targetPiece.side)) {
+            throw new IllegalArgumentException(CANNOT_CAPTURE_OWN_PIECE);
         }
     }
 
@@ -49,7 +60,9 @@ public abstract class Piece {
         return false;
     }
 
-    public abstract List<Position> findRoute(Position sourcePosition, Position targetPosition);
+    public abstract List<Position> findRoute(Position source);
+
+    public abstract List<Position> findPathTo(Position source, Position target);
 
     public abstract String getName();
 }
