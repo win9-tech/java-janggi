@@ -2,6 +2,7 @@ package domain.piece;
 
 import domain.Position;
 import domain.Side;
+import domain.strategy.PathMovement;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -23,7 +24,7 @@ class ElephantTest {
     ) {
         Position source = Position.of(sourceX, sourceY);
         Position target = Position.of(targetX, targetY);
-        Piece piece = new Elephant(IRRELEVANT_SIDE);
+        Piece piece = new Elephant(IRRELEVANT_SIDE, new PathMovement());
 
         assertThat(piece.findRoute(source)).contains(target);
     }
@@ -39,7 +40,7 @@ class ElephantTest {
     ) {
         Position source = Position.of(sourceX, sourceY);
         Position target = Position.of(targetX, targetY);
-        Piece piece = new Elephant(IRRELEVANT_SIDE);
+        Piece piece = new Elephant(IRRELEVANT_SIDE, new PathMovement());
 
         assertThat(piece.findRoute(source)).doesNotContain(target);
     }
