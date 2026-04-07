@@ -69,4 +69,6 @@ public abstract class Piece {
     public abstract List<Position> findPathTo(Position source, Position target);
 
     public abstract String getName();
+
+    public abstract double getScore();
 }

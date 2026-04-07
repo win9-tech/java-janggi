@@ -1,6 +1,7 @@
 package view;
 
 import domain.Position;
+import domain.ScoreStatus;
 import domain.Side;
 import domain.Turn;
 import domain.piece.Piece;
@@ -18,8 +19,9 @@ public class OutputView {
     private static final String YELLOW = "\u001B[33m";
     private static final String RESET = "\u001B[0m";
 
-    public void printBoardStatus(Map<Position, Piece> board) {
+    public void printBoardStatus(Map<Position, Piece> board, ScoreStatus scoreStatus) {
         System.out.println();
+        System.out.println(BLUE + " 초: " + scoreStatus.getChoScore() + "            " + RED + "한: " + scoreStatus.getHanScore() + RESET);
         System.out.println("    1  2  3  4  5  6  7  8  9");
 
         for (int y = MIN_Y; y <= MAX_Y; y++) {
@@ -41,8 +43,9 @@ public class OutputView {
         System.out.println("한의 차례입니다.");
     }
 
-    public void printAvailablePath(List<Position> availablePositions, Map<Position, Piece> board) {
+    public void printAvailablePath(List<Position> availablePositions, Map<Position, Piece> board, ScoreStatus scoreStatus) {
         System.out.println();
+        System.out.println(BLUE + " 초: " + scoreStatus.getChoScore() + "            " + RED + "한: " + scoreStatus.getHanScore() + RESET);
         System.out.println("    1  2  3  4  5  6  7  8  9");
 
         for (int y = MIN_Y; y <= MAX_Y; y++) {
@@ -61,6 +64,26 @@ public class OutputView {
             }
             System.out.println(RESET);
         }
+    }
+
+    public void printErrorMessage(String errorMessage) {
+        System.out.println(ERROR_PREFIX + errorMessage);
+    }
+
+    public void printWinner(Side current) {
+        if(current == Side.CHO) {
+            System.out.println("초가 승리했습니다.");
+            return;
+        }
+        System.out.println("한이 승리했습니다.");
+    }
+
+    public void printResultByScore(ScoreStatus scoreStatus) {
+        if(scoreStatus.getChoScore() > scoreStatus.getHanScore()) {
+            System.out.println("초가 승리했습니다.");
+            return;
+        }
+        System.out.println("한이 승리했습니다.");
     }
 
     private void printRowNumber(int y) {
@@ -87,17 +110,5 @@ public class OutputView {
             return BLUE;
         }
         return RESET;
-    }
-
-    public void printErrorMessage(String errorMessage) {
-        System.out.println(ERROR_PREFIX + errorMessage);
-    }
-
-    public void printWinner(Side current) {
-        if(current == Side.CHO) {
-            System.out.println("한이 승리했습니다.");
-            return;
-        }
-        System.out.println("한이 승리했습니다.");
     }
 }

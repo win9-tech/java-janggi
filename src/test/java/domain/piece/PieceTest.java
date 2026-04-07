@@ -31,6 +31,11 @@ class PieceTest {
         public String getName() {
             return "";
         }
+
+        @Override
+        public double getScore() {
+            return 0;
+        }
     }
 
 

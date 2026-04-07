@@ -27,6 +27,7 @@ public class InputView {
         System.out.println("""
                 1. 기물 이동
                 2. 한수쉼
+                3. 점수 판정
                 """);
         String input = scanner.nextLine();
         return parseTurnAction(input);

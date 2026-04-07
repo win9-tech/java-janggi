@@ -33,4 +33,9 @@ public class Empty extends Piece{
     public String getName() {
         return "．";
     }
+
+    @Override
+    public double getScore() {
+        return 0;
+    }
 }

@@ -54,6 +54,14 @@ public class Board {
         return board;
     }
 
+    public ScoreStatus calculateScore() {
+        ScoreStatus scoreStatus = new ScoreStatus();
+        for(Piece piece : board.values()) {
+            scoreStatus.reflect(piece);
+        }
+        return scoreStatus;
+    }
+
     private void createBoard(Formation choFormation, Formation hanFormation) {
         for (int x = MIN_X; x <= MAX_X; x++) {
             for (int y = MIN_Y; y <= MAX_Y; y++) {

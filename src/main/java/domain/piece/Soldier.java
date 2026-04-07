@@ -66,4 +66,9 @@ public class Soldier extends Piece {
         }
         return "兵";
     }
+
+    @Override
+    public double getScore() {
+        return 2;
+    }
 }

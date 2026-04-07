@@ -45,4 +45,9 @@ public class Chariot extends Piece {
         }
         return "車";
     }
+
+    @Override
+    public double getScore() {
+        return 13;
+    }
 }

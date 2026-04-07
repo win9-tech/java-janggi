@@ -37,4 +37,9 @@ public class Horse extends Piece {
         }
         return "馬";
     }
+
+    @Override
+    public double getScore() {
+        return 5;
+    }
 }

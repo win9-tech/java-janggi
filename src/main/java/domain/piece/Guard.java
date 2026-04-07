@@ -39,4 +39,9 @@ public class Guard extends Piece {
     public String getName() {
         return "士";
     }
+
+    @Override
+    public double getScore() {
+        return 3;
+    }
 }

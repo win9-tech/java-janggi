@@ -35,8 +35,12 @@ public class JanggiController {
     private boolean executeAction(Turn turn, Board board, TurnAction action) {
         if (action == TurnAction.PASS) {
             turn.next();
-            outputView.printBoardStatus(board.getBoard());
+            outputView.printBoardStatus(board.getBoard(), board.calculateScore());
             return true;
+        }
+        if (action == TurnAction.JUDGE) {
+            outputView.printResultByScore(board.calculateScore());
+            return false;
         }
         return move(board, turn);
     }
@@ -45,10 +49,10 @@ public class JanggiController {
         try {
             Position sourcePosition = readSourcePosition();
             List<Position> availableTargets = board.findPath(sourcePosition, turn);
-            outputView.printAvailablePath(availableTargets, board.getBoard());
+            outputView.printAvailablePath(availableTargets, board.getBoard(), board.calculateScore());
             Position targetPosition = readTargetPosition();
             Piece captured = board.movePiece(sourcePosition, targetPosition, availableTargets);
-            outputView.printBoardStatus(board.getBoard());
+            outputView.printBoardStatus(board.getBoard(), board.calculateScore());
             if (captured.isKing()) {
                 outputView.printWinner(turn.current());
                 return false;
@@ -99,7 +103,7 @@ public class JanggiController {
         Formation choFormation = readChoFormation();
         Formation hanFormation = readHanFormation();
         Board board = new Board(choFormation, hanFormation);
-        outputView.printBoardStatus(board.getBoard());
+        outputView.printBoardStatus(board.getBoard(), board.calculateScore());
         return board;
     }
 

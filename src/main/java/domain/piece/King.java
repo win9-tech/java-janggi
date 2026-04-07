@@ -47,4 +47,9 @@ public class King extends Piece {
         }
         return "漢";
     }
+
+    @Override
+    public double getScore() {
+        return 0;
+    }
 }

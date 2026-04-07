@@ -91,4 +91,9 @@ public class Cannon extends Piece {
     public String getName() {
         return "包";
     }
+
+    @Override
+    public double getScore() {
+        return 7;
+    }
 }
