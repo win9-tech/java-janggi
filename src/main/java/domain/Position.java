@@ -32,6 +32,18 @@ public class Position {
         return Position.of(x + dx, y + dy);
     }
 
+    public boolean isDiagonalTo(Position target) {
+        int dx = Math.abs(target.x - this.x);
+        int dy = Math.abs(target.y - this.y);
+        return dx == dy && dx > 0;
+    }
+
+    public Direction directionTo(Position target) {
+        int dx = Integer.signum(target.x - this.x);
+        int dy = Integer.signum(target.y - this.y);
+        return Direction.of(dx, dy);
+    }
+
     private static void validateOutOfRange(int x, int y) {
         if(!((MIN_X <= x && x <= MAX_X) && (MIN_Y <= y && y <= MAX_Y))) {
             throw new IllegalArgumentException(INVALID_POSITION_RANGE);
