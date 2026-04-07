@@ -39,13 +39,15 @@ public class Board {
         return filterValidTargets(piece, sourcePosition);
     }
 
-    public void movePiece(Position source, Position target, List<Position> availableTargets) {
+    public Piece movePiece(Position source, Position target, List<Position> availableTargets) {
         if (!availableTargets.contains(target)) {
             throw new IllegalArgumentException(INVALID_TARGET_POSITION);
         }
         Piece piece = board.get(source);
+        Piece captured = board.get(target);
         board.put(target, piece);
         board.put(source, new Empty());
+        return captured;
     }
 
     public Map<Position, Piece> getBoard() {

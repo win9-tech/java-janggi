@@ -60,6 +60,10 @@ public abstract class Piece {
         return false;
     }
 
+    public boolean isKing() {
+        return false;
+    }
+
     public abstract List<Position> findRoute(Position source);
 
     public abstract List<Position> findPathTo(Position source, Position target);

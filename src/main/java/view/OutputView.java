@@ -92,4 +92,12 @@ public class OutputView {
     public void printErrorMessage(String errorMessage) {
         System.out.println(ERROR_PREFIX + errorMessage);
     }
+
+    public void printWinner(Side current) {
+        if(current == Side.CHO) {
+            System.out.println("한이 승리했습니다.");
+            return;
+        }
+        System.out.println("한이 승리했습니다.");
+    }
 }

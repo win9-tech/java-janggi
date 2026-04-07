@@ -1,6 +1,7 @@
 package controller;
 
 import domain.*;
+import domain.piece.Piece;
 import view.InputView;
 import view.OutputView;
 
@@ -23,33 +24,40 @@ public class JanggiController {
 
     private void playGame(Board board) {
         Turn turn = new Turn(Side.CHO);
-        while (true) {
+        boolean isRunning = true;
+        while (isRunning) {
             outputView.printCurrentTurn(turn);
             TurnAction action = readTurnAction();
-            executeAction(turn, board, action);
+            isRunning = executeAction(turn, board, action);
         }
     }
 
-    private void executeAction(Turn turn, Board board, TurnAction action) {
+    private boolean executeAction(Turn turn, Board board, TurnAction action) {
         if (action == TurnAction.PASS) {
             turn.next();
             outputView.printBoardStatus(board.getBoard());
-            return;
+            return true;
         }
-        move(board, turn);
-        outputView.printBoardStatus(board.getBoard());
+        return move(board, turn);
     }
 
-    private void move(Board board, Turn turn) {
+    private boolean move(Board board, Turn turn) {
         try {
             Position sourcePosition = readSourcePosition();
             List<Position> availableTargets = board.findPath(sourcePosition, turn);
             outputView.printAvailablePath(availableTargets, board.getBoard());
             Position targetPosition = readTargetPosition();
-            board.movePiece(sourcePosition, targetPosition, availableTargets);
+            Piece captured = board.movePiece(sourcePosition, targetPosition, availableTargets);
+            outputView.printBoardStatus(board.getBoard());
+            if (captured.isKing()) {
+                outputView.printWinner(turn.current());
+                return false;
+            }
             turn.next();
+            return true;
         } catch (IllegalArgumentException e) {
             outputView.printErrorMessage(e.getMessage());
+            return true;
         }
     }
 
