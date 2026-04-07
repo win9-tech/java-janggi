@@ -9,7 +9,7 @@ import java.util.List;
 
 public class Horse extends Piece {
 
-    private static final List<List<Direction>> paths = List.of(
+    private static final List<List<Direction>> PATHS = List.of(
       List.of(Direction.UP, Direction.UP_LEFT), List.of(Direction.UP, Direction.UP_RIGHT),
       List.of(Direction.RIGHT, Direction.UP_RIGHT), List.of(Direction.RIGHT, Direction.DOWN_RIGHT),
       List.of(Direction.DOWN, Direction.DOWN_LEFT), List.of(Direction.DOWN, Direction.DOWN_RIGHT),
@@ -21,13 +21,13 @@ public class Horse extends Piece {
     }
 
     @Override
-    public List<Position> findRoute(Position sourcePosition) {
-        return movementStrategy.findRoute(paths, sourcePosition);
+    public List<Position> findRoute(Position source) {
+        return movementStrategy.findRoute(PATHS, source);
     }
 
     @Override
     public List<Position> findPathTo(Position source, Position target) {
-        return movementStrategy.findPathTo(paths, source, target);
+        return movementStrategy.findPathTo(PATHS, source, target);
     }
 
     @Override
