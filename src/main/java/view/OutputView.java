@@ -5,6 +5,7 @@ import domain.Side;
 import domain.Turn;
 import domain.piece.Piece;
 
+import java.util.List;
 import java.util.Map;
 
 import static constant.BoardConstant.*;
@@ -14,6 +15,7 @@ public class OutputView {
 
     private static final String RED = "\u001B[31m";
     private static final String BLUE = "\u001B[34m";
+    private static final String YELLOW = "\u001B[33m";
     private static final String RESET = "\u001B[0m";
 
     public void printBoardStatus(Map<Position, Piece> board) {
@@ -39,12 +41,37 @@ public class OutputView {
         System.out.println("한의 차례입니다.");
     }
 
+    public void printAvailablePath(List<Position> availablePositions, Map<Position, Piece> board) {
+        System.out.println();
+        System.out.println("    1  2  3  4  5  6  7  8  9");
+
+        for (int y = MIN_Y; y <= MAX_Y; y++) {
+            printRowNumber(y);
+            for (int x = MIN_X; x <= MAX_X; x++) {
+                Position position = Position.of(x, y);
+                if (availablePositions.contains(position) && !board.get(position).isEmpty()) {
+                    Piece piece = board.get(position);
+                    printTargetPiece(piece);
+                } else if (availablePositions.contains(position)) {
+                    System.out.print(YELLOW + "。 ");
+                } else {
+                    Piece piece = board.get(position);
+                    printPiece(piece);
+                }
+            }
+            System.out.println(RESET);
+        }
+    }
+
     private void printRowNumber(int y) {
         if (y < 10) {
             System.out.print(" " + y + "  ");
         } else {
             System.out.print(y + "  ");
         }
+    }
+    private void printTargetPiece(Piece piece) {
+        System.out.print(YELLOW + piece.getName() + " ");
     }
 
     private void printPiece(Piece piece) {

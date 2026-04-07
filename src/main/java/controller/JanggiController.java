@@ -4,6 +4,8 @@ import domain.*;
 import view.InputView;
 import view.OutputView;
 
+import java.util.List;
+
 public class JanggiController {
 
     private final InputView inputView;
@@ -39,10 +41,12 @@ public class JanggiController {
     }
 
     private void move(Board board, Turn turn) {
-        Position sourcePosition = readSourcePosition();
-        Position targetPosition = readTargetPosition();
         try {
-            board.movePiece(turn, sourcePosition, targetPosition);
+            Position sourcePosition = readSourcePosition();
+            List<Position> availableTargets = board.findPath(sourcePosition, turn);
+            outputView.printAvailablePath(availableTargets, board.getBoard());
+            Position targetPosition = readTargetPosition();
+            board.movePiece(sourcePosition, targetPosition, availableTargets);
             turn.next();
         } catch (IllegalArgumentException e) {
             outputView.printErrorMessage(e.getMessage());
