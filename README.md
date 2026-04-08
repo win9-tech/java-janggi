@@ -34,6 +34,7 @@
 - [x] 게임 불러오기 기능
 - [x] 새 게임 / 이어하기 선택 기능
 - [x] 게임 삭제 기능
+- [x] 존재하지 않는 게임 ID 입력 시 재선택 기능
 
 ---
 
@@ -64,16 +65,14 @@
 ```
 src/main/java
 ├── Main.java
+├── JanggiRunner.java
 ├── constant
 │   ├── BoardConstant.java
 │   └── ErrorMessage.java
-├── controller
-│   └── JanggiController.java
 ├── domain
 │   ├── Direction.java
 │   ├── Formation.java
 │   ├── Game.java
-│   ├── GameStatus.java
 │   ├── Palace.java
 │   ├── Position.java
 │   ├── ScoreStatus.java
@@ -97,6 +96,7 @@ src/main/java
 │       └── PathMovement.java
 ├── repository
 │   ├── GameRepository.java
+│   ├── GameStatus.java
 │   └── MongoDBRepository.java
 └── view
     ├── ConsoleView.java
