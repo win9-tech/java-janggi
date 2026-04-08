@@ -48,7 +48,7 @@ public class OutputView {
     }
 
     public void printWinner(Side winner) {
-        System.out.println(getSideName(winner) + "가 승리했습니다.");
+        System.out.println(getSideName(winner) + "이(가) 승리했습니다.");
     }
 
     public void printResultByScore(ScoreStatus scoreStatus) {
