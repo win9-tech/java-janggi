@@ -19,8 +19,9 @@ public class OutputView {
     private static final String YELLOW = "\u001B[33m";
     private static final String RESET = "\u001B[0m";
 
-    public void printBoardStatus(Map<Position, Piece> board, ScoreStatus scoreStatus) {
+    public void printBoardStatus(Long id, Map<Position, Piece> board, ScoreStatus scoreStatus) {
         System.out.println();
+        System.out.println(id+"번 게임");
         System.out.println(BLUE + " 초: " + scoreStatus.getChoScore() + "            " + RED + "한: " + scoreStatus.getHanScore() + RESET);
         System.out.println("    1  2  3  4  5  6  7  8  9");
 
@@ -43,8 +44,9 @@ public class OutputView {
         System.out.println("한의 차례입니다.");
     }
 
-    public void printAvailablePath(List<Position> availablePositions, Map<Position, Piece> board, ScoreStatus scoreStatus) {
+    public void printAvailablePath(Long id, List<Position> availablePositions, Map<Position, Piece> board, ScoreStatus scoreStatus) {
         System.out.println();
+        System.out.println(id+"번 게임");
         System.out.println(BLUE + " 초: " + scoreStatus.getChoScore() + "            " + RED + "한: " + scoreStatus.getHanScore() + RESET);
         System.out.println("    1  2  3  4  5  6  7  8  9");
 
@@ -55,14 +57,16 @@ public class OutputView {
                 if (availablePositions.contains(position) && !board.get(position).isEmpty()) {
                     Piece piece = board.get(position);
                     printTargetPiece(piece);
-                } else if (availablePositions.contains(position)) {
-                    System.out.print(YELLOW + "。 ");
-                } else {
-                    Piece piece = board.get(position);
-                    printPiece(piece);
+                    System.out.println(RESET);
                 }
+                if (availablePositions.contains(position)) {
+                    System.out.print(YELLOW + "。 ");
+                    System.out.println(RESET);
+                }
+                Piece piece = board.get(position);
+                printPiece(piece);
+                System.out.println(RESET);
             }
-            System.out.println(RESET);
         }
     }
 

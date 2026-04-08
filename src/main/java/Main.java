@@ -1,10 +1,11 @@
 import controller.JanggiController;
+import repository.MongoDBRepository;
 import view.InputView;
 import view.OutputView;
 
 public class Main {
     public static void main(String[] args) {
-        JanggiController janggiController = new JanggiController(new InputView(), new OutputView());
+        JanggiController janggiController = new JanggiController(new InputView(), new OutputView(), new MongoDBRepository());
         janggiController.run();
     }
 }

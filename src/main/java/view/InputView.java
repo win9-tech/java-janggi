@@ -33,6 +33,19 @@ public class InputView {
         return parseTurnAction(input);
     }
 
+    public String readOption() {
+            System.out.println("""
+                1. 새 게임
+                2. 이어하기
+                """);
+             return scanner.nextLine();
+    }
+
+    public String readGameId() {
+        System.out.println("게임 ID를 입력해주세요");
+        return scanner.nextLine();
+    }
+
     private Formation parseFormation(String input) {
         int index = parseFormationIndex(input);
         return Formation.values()[index - 1];
