@@ -103,3 +103,29 @@ src/main/java
     ├── InputView.java
     └── OutputView.java
 ```
+
+## MongoDB 설정
+
+### macOS
+```bash
+brew tap mongodb/brew
+brew install mongodb-community
+brew services start mongodb-community
+```
+
+### Windows
+1. [MongoDB 공식 사이트](https://www.mongodb.com/try/download/community)에서 MSI 설치 파일 다운로드
+2. 설치 시 "Install MongoDB as a Service" 체크
+3. 설치 완료 후 자동 실행
+
+### Docker
+```bash
+docker run -d -p 27017:27017 --name mongodb mongo:latest
+```
+
+### 연결 정보
+- URI: `mongodb://localhost:27017`
+- Database: `janggi_db`
+- Collections: `boards`, `counters`
+
+---
