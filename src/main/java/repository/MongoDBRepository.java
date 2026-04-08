@@ -15,6 +15,8 @@ import org.bson.Document;
 import java.util.HashMap;
 import java.util.Map;
 
+import static constant.BoardConstant.*;
+
 public class MongoDBRepository implements GameRepository {
 
     private static final String URI = "mongodb://localhost:27017";
@@ -108,14 +110,14 @@ public class MongoDBRepository implements GameRepository {
 
     private Map<Position, Piece> parseBoard(Document layout) {
         Map<Position, Piece> board = new HashMap<>();
-        for (int x = 1; x <= 9; x++) {
+        for (int x = MIN_X; x <= MAX_X; x++) {
             parseBoardColumn(layout, board, x);
         }
         return board;
     }
 
     private void parseBoardColumn(Document layout, Map<Position, Piece> board, int x) {
-        for (int y = 1; y <= 10; y++) {
+        for (int y = MIN_Y; y <= MAX_Y; y++) {
             Document pieceDoc = (Document) layout.get(x + " " + y);
             Piece piece = parsePiece(pieceDoc);
             board.put(Position.of(x, y), piece);
