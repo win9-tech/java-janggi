@@ -8,12 +8,12 @@ import view.ConsoleView;
 import java.util.List;
 import java.util.Map;
 
-public class JanggiController {
+public class JanggiRunner {
 
     private final ConsoleView consoleView;
     private final GameRepository gameRepository;
 
-    public JanggiController(ConsoleView consoleView, GameRepository gameRepository) {
+    public JanggiRunner(ConsoleView consoleView, GameRepository gameRepository) {
         this.consoleView = consoleView;
         this.gameRepository = gameRepository;
     }

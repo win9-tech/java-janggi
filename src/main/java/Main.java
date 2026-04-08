@@ -1,4 +1,4 @@
-import controller.JanggiController;
+import controller.JanggiRunner;
 import repository.MongoDBRepository;
 import view.ConsoleView;
 import view.InputView;
@@ -6,7 +6,7 @@ import view.OutputView;
 
 public class Main {
     public static void main(String[] args) {
-        JanggiController janggiController = new JanggiController(new ConsoleView(new InputView(), new OutputView()), new MongoDBRepository());
-        janggiController.run();
+        JanggiRunner janggiRunner = new JanggiRunner(new ConsoleView(new InputView(), new OutputView()), new MongoDBRepository());
+        janggiRunner.run();
     }
 }
