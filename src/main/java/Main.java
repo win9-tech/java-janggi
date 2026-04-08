@@ -1,4 +1,3 @@
-import controller.JanggiRunner;
 import repository.MongoDBRepository;
 import view.ConsoleView;
 import view.InputView;

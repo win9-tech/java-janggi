@@ -1,5 +1,7 @@
-package domain;
+package repository;
 
+import domain.Position;
+import domain.Turn;
 import domain.piece.Piece;
 
 import java.util.Map;

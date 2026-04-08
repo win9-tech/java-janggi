@@ -1,6 +1,5 @@
 package repository;
 
-import domain.GameStatus;
 import domain.Position;
 import domain.Turn;
 import domain.piece.Piece;

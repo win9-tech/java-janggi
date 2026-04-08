@@ -1,8 +1,7 @@
-package controller;
-
 import domain.*;
 import domain.piece.Piece;
 import repository.GameRepository;
+import repository.GameStatus;
 import view.ConsoleView;
 
 import java.util.List;
