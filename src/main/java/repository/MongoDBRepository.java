@@ -21,6 +21,11 @@ public class MongoDBRepository implements GameRepository {
 
     private static final String URI = "mongodb://localhost:27017";
     private static final String DB_NAME = "janggi_db";
+    private final MongoClient client;
+
+    public MongoDBRepository() {
+        this.client = MongoClients.create(URI);
+    }
 
     private static final Map<String, PieceType> NAME_TO_TYPE = Map.ofEntries(
             Map.entry("卒", PieceType.SOLDIER),
@@ -39,7 +44,6 @@ public class MongoDBRepository implements GameRepository {
 
     @Override
     public Long getNextId() {
-        try (MongoClient client = MongoClients.create(URI)) {
             MongoCollection<Document> counters = getCollection(client, "counters");
             Document result = counters.findOneAndUpdate(
                     Filters.eq("_id", "gameId"),
@@ -47,34 +51,27 @@ public class MongoDBRepository implements GameRepository {
                     new FindOneAndUpdateOptions().upsert(true).returnDocument(ReturnDocument.AFTER)
             );
             return result.getLong("seq");
-        }
     }
 
     @Override
     public void deleteBoard(Long gameId) {
-        try (MongoClient client = MongoClients.create(URI)) {
             MongoCollection<Document> collection = getCollection(client, "boards");
             collection.deleteOne(Filters.eq("_id", gameId));
-        }
     }
 
     @Override
     public void saveBoard(Long gameId, Turn turn, Map<Position, Piece> board) {
-        try (MongoClient client = MongoClients.create(URI)) {
             MongoCollection<Document> collection = getCollection(client, "boards");
             Document doc = createGameDocument(gameId, turn, board);
             collection.replaceOne(Filters.eq("_id", gameId), doc, new ReplaceOptions().upsert(true));
-        }
     }
 
     @Override
     public GameStatus findBoard(String gameId) {
-        try (MongoClient client = MongoClients.create(URI)) {
             MongoCollection<Document> collection = getCollection(client, "boards");
             Long id = Long.parseLong(gameId);
             Document document = collection.find(Filters.eq("_id", id)).first();
             return parseGameStatus(id, document);
-        }
     }
 
     private MongoCollection<Document> getCollection(MongoClient client, String name) {
