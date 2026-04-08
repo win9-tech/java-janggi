@@ -50,6 +50,14 @@ public class MongoDBRepository implements GameRepository {
     }
 
     @Override
+    public void deleteBoard(Long gameId) {
+        try (MongoClient client = MongoClients.create(URI)) {
+            MongoCollection<Document> collection = getCollection(client, "boards");
+            collection.deleteOne(Filters.eq("_id", gameId));
+        }
+    }
+
+    @Override
     public void saveBoard(Long gameId, Turn turn, Map<Position, Piece> board) {
         try (MongoClient client = MongoClients.create(URI)) {
             MongoCollection<Document> collection = getCollection(client, "boards");

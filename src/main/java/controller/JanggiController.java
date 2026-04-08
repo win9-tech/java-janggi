@@ -54,6 +54,7 @@ public class JanggiController {
         }
         if (action == TurnAction.JUDGE) {
             consoleView.printResultByScore(game.calculateScore());
+            gameRepository.deleteBoard(game.getId());
             return false;
         }
         return move(game, turn);
@@ -65,16 +66,21 @@ public class JanggiController {
             List<Position> availableTargets = findAvailableTarget(game, turn, sourcePosition);
             Position targetPosition = readTargetPosition();
             Piece captured = moveToTarget(game, sourcePosition, targetPosition, availableTargets);
-
-            if (validateGameFinished(turn, captured)) {
-                return false;
-            }
-            afterMove(game.getId(), game.getTurn(), game.getBoard());
-            return true;
+            return handleMoveResult(game, turn, captured);
         } catch (IllegalArgumentException e) {
             consoleView.printErrorMessage(e.getMessage());
             return true;
         }
+    }
+
+    private boolean handleMoveResult(Game game, Turn turn, Piece captured) {
+        if (captured.isKing()) {
+            consoleView.printWinner(turn.current());
+            gameRepository.deleteBoard(game.getId());
+            return false;
+        }
+        afterMove(game.getId(), game.getTurn(), game.getBoard());
+        return true;
     }
 
     private List<Position> findAvailableTarget(Game game, Turn turn, Position sourcePosition) {
@@ -87,14 +93,6 @@ public class JanggiController {
         Piece captured = game.movePiece(sourcePosition, targetPosition, availableTargets);
         consoleView.printBoardStatus(game.getId(), game.getBoard(), game.calculateScore());
         return captured;
-    }
-
-    private boolean validateGameFinished(Turn turn, Piece captured) {
-        if(captured.isKing()) {
-            consoleView.printWinner(turn.current());
-            return true;
-        }
-        return false;
     }
 
     private void afterMove(Long id, Turn turn, Map<Position, Piece> board) {

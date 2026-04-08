@@ -13,5 +13,7 @@ public interface GameRepository {
 
     void saveBoard(Long gameId, Turn turn, Map<Position, Piece> board);
 
+    void deleteBoard(Long gameId);
+
     GameStatus findBoard(String gameId);
 }
