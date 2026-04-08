@@ -16,7 +16,7 @@ public class ConsoleView {
         this.outputView = outputView;
     }
 
-    public String readOption() {
+    public int readOption() {
         return inputView.readOption();
     }
 

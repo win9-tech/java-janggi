@@ -24,8 +24,8 @@ public class JanggiController {
     }
 
     private Game loadGame() {
-        String input = consoleView.readOption();
-        if(input.equals("1")) {
+        int option = readOption();
+        if(option == 1) {
             Game game = new Game(gameRepository.getNextId(), new Turn(Side.CHO), readChoFormation(), readHanFormation());
             consoleView.printBoardStatus(game.getId(), game.getBoard(), game.calculateScore());
             return game;
@@ -34,6 +34,16 @@ public class JanggiController {
         Game game = new Game(gameStatus.getGameId(), gameStatus.getTurn(), gameStatus.getBoard());
         consoleView.printBoardStatus(game.getId(), game.getBoard(), game.calculateScore());
         return game;
+    }
+
+    private int readOption() {
+        while (true) {
+            try {
+                return consoleView.readOption();
+            } catch (IllegalArgumentException e) {
+                consoleView.printErrorMessage(e.getMessage());
+            }
+        }
     }
 
     private void playGame(Game game) {

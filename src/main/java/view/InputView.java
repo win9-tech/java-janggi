@@ -11,12 +11,12 @@ public class InputView {
 
     private final Scanner scanner = new Scanner(System.in);
 
-    public String readOption() {
+    public int readOption() {
         System.out.println("""
                 1. 새 게임
                 2. 이어하기
                 """);
-        return scanner.nextLine();
+        return parseOption(scanner.nextLine());
     }
 
     public String readGameId() {
@@ -117,6 +117,18 @@ public class InputView {
             return index;
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException(INVALID_TURN_ACTION_RANGE);
+        }
+    }
+
+    private int parseOption(String input) {
+        try {
+            int index = Integer.parseInt(input);
+            if(!(1 <= index && index <= 2)) {
+                throw new IllegalArgumentException(INVALID_OPTION_RANGE);
+            }
+            return index;
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException(INVALID_OPTION_RANGE);
         }
     }
 }

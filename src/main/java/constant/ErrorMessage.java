@@ -6,7 +6,8 @@ public class ErrorMessage {
 
     public static final String READ_FORMATION_MESSAGE = "[%s] 포진을 선택해주세요.";
     public static final String INVALID_FORMATION_RANGE = "번호는 1~4 사이의 숫자여야 합니다.";
-    public static final String INVALID_TURN_ACTION_RANGE = "1 또는 2를 입력해주세요.";
+    public static final String INVALID_TURN_ACTION_RANGE = "1, 2, 3 중 하나를 입력해주세요.";
+    public static final String INVALID_OPTION_RANGE = "1, 2 중 하나를 입력해주세요.";
     public static final String INVALID_NUMBER_FORMAT = "유효한 숫자를 입력해주세요.";
     public static final String INVALID_POSITION_RANGE = "x 좌표는 1~9, y 좌표는 1~10, 사이여야 합니다.";
 
