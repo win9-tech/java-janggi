@@ -44,6 +44,10 @@ public class Position {
         return Direction.of(dx, dy);
     }
 
+    public String createStoreKey() {
+        return x + " " + y;
+    }
+
     private static void validateOutOfRange(int x, int y) {
         if(!((MIN_X <= x && x <= MAX_X) && (MIN_Y <= y && y <= MAX_Y))) {
             throw new IllegalArgumentException(INVALID_POSITION_RANGE);

@@ -27,9 +27,14 @@ public class Board {
     private static final List<Integer> FORMATION_X = List.of(2, 3, 7, 8);
 
     private final Map<Position, Piece> board = new HashMap<>();
+    private Long id;
 
     public Board(Formation choFormation, Formation hanFormation) {
         createBoard(choFormation, hanFormation);
+    }
+
+    public Board(Map<Position, Piece> board) {
+        this.board.putAll(board);
     }
 
     public List<Position> findPath(Position sourcePosition, Turn turn) {
@@ -50,16 +55,24 @@ public class Board {
         return captured;
     }
 
-    public Map<Position, Piece> getBoard() {
-        return board;
-    }
-
     public ScoreStatus calculateScore() {
         ScoreStatus scoreStatus = new ScoreStatus();
         for(Piece piece : board.values()) {
             scoreStatus.reflect(piece);
         }
         return scoreStatus;
+    }
+
+    public Map<Position, Piece> getBoard() {
+        return board;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void assignId(Long id) {
+        this.id = id;
     }
 
     private void createBoard(Formation choFormation, Formation hanFormation) {
