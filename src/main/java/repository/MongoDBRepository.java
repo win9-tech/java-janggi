@@ -4,12 +4,8 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.FindOneAndUpdateOptions;
-import com.mongodb.client.model.ReplaceOptions;
-import com.mongodb.client.model.ReturnDocument;
-import com.mongodb.client.model.Updates;
-import domain.BoardStatus;
+import com.mongodb.client.model.*;
+import domain.GameStatus;
 import domain.Position;
 import domain.Side;
 import domain.Turn;
@@ -85,7 +81,7 @@ public class MongoDBRepository implements JdbcRepository {
     }
 
     @Override
-    public BoardStatus findBoard(String gameId) {
+    public GameStatus findBoard(String gameId) {
         try (MongoClient mongoClient = MongoClients.create(URI)) {
             MongoDatabase database = mongoClient.getDatabase(DB_NAME);
             MongoCollection<Document> collection = database.getCollection("boards");
@@ -114,7 +110,7 @@ public class MongoDBRepository implements JdbcRepository {
             String turnSide = document.getString("turn");
             Turn turn = new Turn(Side.valueOf(turnSide));
 
-            return BoardStatus.of(id, board, turn);
+            return GameStatus.of(id, board, turn);
         }
     }
 }

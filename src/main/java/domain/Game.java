@@ -12,7 +12,7 @@ import java.util.Map;
 import static constant.BoardConstant.*;
 import static constant.ErrorMessage.*;
 
-public class Board {
+public class Game {
 
     private static final int BACK_Y = 0;
     private static final int KING_Y = 1;
@@ -27,14 +27,19 @@ public class Board {
     private static final List<Integer> FORMATION_X = List.of(2, 3, 7, 8);
 
     private final Map<Position, Piece> board = new HashMap<>();
-    private Long id;
+    private final Long id;
+    private final Turn turn;
 
-    public Board(Formation choFormation, Formation hanFormation) {
+    public Game(Long id, Turn turn, Formation choFormation, Formation hanFormation) {
         createBoard(choFormation, hanFormation);
+        this.id = id;
+        this.turn = turn;
     }
 
-    public Board(Map<Position, Piece> board) {
+    public Game(Long id, Turn turn, Map<Position, Piece> board) {
         this.board.putAll(board);
+        this.id = id;
+        this.turn = turn;
     }
 
     public List<Position> findPath(Position sourcePosition, Turn turn) {
@@ -63,16 +68,16 @@ public class Board {
         return scoreStatus;
     }
 
-    public Map<Position, Piece> getBoard() {
-        return board;
-    }
-
     public Long getId() {
         return id;
     }
 
-    public void assignId(Long id) {
-        this.id = id;
+    public Turn getTurn() {
+        return turn;
+    }
+
+    public Map<Position, Piece> getBoard() {
+        return board;
     }
 
     private void createBoard(Formation choFormation, Formation hanFormation) {

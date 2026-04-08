@@ -1,6 +1,6 @@
 package repository;
 
-import domain.BoardStatus;
+import domain.GameStatus;
 import domain.Position;
 import domain.Turn;
 import domain.piece.Piece;
@@ -13,5 +13,5 @@ public interface JdbcRepository {
 
     void saveBoard(Long gameId, Turn turn, Map<Position, Piece> board);
 
-    BoardStatus findBoard(String gameId);
+    GameStatus findBoard(String gameId);
 }

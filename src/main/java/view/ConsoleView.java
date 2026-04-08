@@ -20,10 +20,6 @@ public class ConsoleView {
         return inputView.readOption();
     }
 
-    public void printBoardStatus(Long id, Map<Position, Piece> board, ScoreStatus scoreStatus) {
-        outputView.printBoardStatus(id, board, scoreStatus);
-    }
-
     public String readGameId() {
         return inputView.readGameId();
     }
@@ -36,43 +32,39 @@ public class ConsoleView {
         return inputView.readHanFormation();
     }
 
-    public void printErrorMessage(String message) {
-        outputView.printErrorMessage(message);
+    public Position readSourcePosition() {
+        return Position.of(inputView.readSourceXPosition(), inputView.readSourceYPosition());
     }
 
-    public int readSourceXPosition() {
-        return inputView.readTargetXPosition();
-    }
-
-    public int readSourceYPosition() {
-        return inputView.readTargetXPosition();
-    }
-
-    public int readTargetXPosition() {
-        return inputView.readTargetXPosition();
-    }
-
-    public int readTargetYPosition() {
-        return inputView.readTargetYPosition();
+    public Position readTargetPosition() {
+        return Position.of(inputView.readTargetXPosition(), inputView.readTargetYPosition());
     }
 
     public TurnAction readTurnAction() {
         return inputView.readTurnAction();
     }
 
-    public void printAvailablePath(Long id, List<Position> availableTargets, Map<Position, Piece> board, ScoreStatus scoreStatus) {
-        outputView.printAvailablePath(id, availableTargets, board, scoreStatus);
+    public void printBoardStatus(Long id, Map<Position, Piece> board, ScoreStatus scoreStatus) {
+        outputView.printBoardStatus(id, board, scoreStatus);
     }
 
-    public void printWinner(Side current) {
-        outputView.printWinner(current);
+    public void printAvailablePath(Long id, List<Position> availableTargets, Map<Position, Piece> board, ScoreStatus scoreStatus) {
+        outputView.printAvailablePath(id, availableTargets, board, scoreStatus);
     }
 
     public void printCurrentTurn(Turn turn) {
         outputView.printCurrentTurn(turn);
     }
 
+    public void printWinner(Side current) {
+        outputView.printWinner(current);
+    }
+
     public void printResultByScore(ScoreStatus scoreStatus) {
         outputView.printResultByScore(scoreStatus);
+    }
+
+    public void printErrorMessage(String message) {
+        outputView.printErrorMessage(message);
     }
 }

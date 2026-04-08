@@ -54,20 +54,23 @@ public class OutputView {
             printRowNumber(y);
             for (int x = MIN_X; x <= MAX_X; x++) {
                 Position position = Position.of(x, y);
-                if (availablePositions.contains(position) && !board.get(position).isEmpty()) {
-                    Piece piece = board.get(position);
-                    printTargetPiece(piece);
-                    System.out.println(RESET);
-                }
-                if (availablePositions.contains(position)) {
-                    System.out.print(YELLOW + "。 ");
-                    System.out.println(RESET);
-                }
                 Piece piece = board.get(position);
-                printPiece(piece);
-                System.out.println(RESET);
+                printCellWithPath(position, piece, availablePositions);
             }
+            System.out.println(RESET);
         }
+    }
+
+    private void printCellWithPath(Position position, Piece piece, List<Position> availablePositions) {
+        if (!availablePositions.contains(position)) {
+            printPiece(piece);
+            return;
+        }
+        if (!piece.isEmpty()) {
+            printTargetPiece(piece);
+            return;
+        }
+        System.out.print(YELLOW + "。 " + RESET);
     }
 
     public void printErrorMessage(String errorMessage) {

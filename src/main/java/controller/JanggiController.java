@@ -3,83 +3,111 @@ package controller;
 import domain.*;
 import domain.piece.Piece;
 import repository.JdbcRepository;
-import view.InputView;
-import view.OutputView;
+import view.ConsoleView;
 
 import java.util.List;
+import java.util.Map;
 
 public class JanggiController {
 
-    private final InputView inputView;
-    private final OutputView outputView;
+    private final ConsoleView consoleView;
     private final JdbcRepository jdbcRepository;
 
-    public JanggiController(InputView inputView, OutputView outputView, JdbcRepository jdbcRepository) {
-        this.inputView = inputView;
-        this.outputView = outputView;
+    public JanggiController(ConsoleView consoleView, JdbcRepository jdbcRepository) {
+        this.consoleView = consoleView;
         this.jdbcRepository = jdbcRepository;
     }
 
     public void run() {
-        BoardStatus boardStatus = loadBoard();
-        playGame(boardStatus);
+        Game game = loadGame();
+        playGame(game);
     }
 
-    private void playGame(BoardStatus boardStatus) {
-        Board board = new Board(boardStatus.getBoard());
-        board.assignId(boardStatus.getGameId());
-        Turn turn = boardStatus.getTurn();
+    private void playGame(Game game) {
         boolean isRunning = true;
-        jdbcRepository.saveBoard(board.getId(), turn, board.getBoard());
+        jdbcRepository.saveBoard(game.getId(), game.getTurn(), game.getBoard());
         while (isRunning) {
-            outputView.printCurrentTurn(turn);
+            consoleView.printCurrentTurn(game.getTurn());
             TurnAction action = readTurnAction();
-            isRunning = executeAction(turn, board, action);
+            isRunning = executeAction(game.getTurn(), game, action);
         }
     }
 
-    private boolean executeAction(Turn turn, Board board, TurnAction action) {
+    private boolean executeAction(Turn turn, Game game, TurnAction action) {
         if (action == TurnAction.PASS) {
             turn.next();
-            outputView.printBoardStatus(board.getId(), board.getBoard(), board.calculateScore());
+            consoleView.printBoardStatus(game.getId(), game.getBoard(), game.calculateScore());
             return true;
         }
         if (action == TurnAction.JUDGE) {
-            outputView.printResultByScore(board.calculateScore());
+            consoleView.printResultByScore(game.calculateScore());
             return false;
         }
-        return move(board, turn);
+        return move(game, turn);
     }
 
-    private boolean move(Board board, Turn turn) {
+    private boolean move(Game game, Turn turn) {
         try {
             Position sourcePosition = readSourcePosition();
-            List<Position> availableTargets = board.findPath(sourcePosition, turn);
-            outputView.printAvailablePath(board.getId(), availableTargets, board.getBoard(), board.calculateScore());
+            List<Position> availableTargets = findAvailableTarget(game, turn, sourcePosition);
             Position targetPosition = readTargetPosition();
-            Piece captured = board.movePiece(sourcePosition, targetPosition, availableTargets);
-            outputView.printBoardStatus(board.getId(), board.getBoard(), board.calculateScore());
+            Piece captured = moveToTarget(game, sourcePosition, targetPosition, availableTargets);
 
-            if (captured.isKing()) {
-                outputView.printWinner(turn.current());
+            if (validateGameFinished(turn, captured)) {
                 return false;
             }
-            jdbcRepository.saveBoard(board.getId(), turn, board.getBoard());
-            turn.next();
+            afterMove(game.getId(), game.getTurn(), game.getBoard());
             return true;
-
         } catch (IllegalArgumentException e) {
-            outputView.printErrorMessage(e.getMessage());
+            consoleView.printErrorMessage(e.getMessage());
             return true;
         }
     }
 
-    private TurnAction readTurnAction() {
+    private void afterMove(Long id, Turn turn, Map<Position, Piece> board) {
+        turn.next();
+        jdbcRepository.saveBoard(id, turn, board);
+    }
+
+    private boolean validateGameFinished(Turn turn, Piece captured) {
+        if(captured.isKing()) {
+            consoleView.printWinner(turn.current());
+            return true;
+        }
+        return false;
+    }
+
+    private Piece moveToTarget(Game game, Position sourcePosition, Position targetPosition, List<Position> availableTargets) {
+        Piece captured = game.movePiece(sourcePosition, targetPosition, availableTargets);
+        consoleView.printBoardStatus(game.getId(), game.getBoard(), game.calculateScore());
+        return captured;
+    }
+
+    private List<Position> findAvailableTarget(Game game, Turn turn, Position sourcePosition) {
+        List<Position> availableTargets = game.findPath(sourcePosition, turn);
+        consoleView.printAvailablePath(game.getId(), availableTargets, game.getBoard(), game.calculateScore());
+        return availableTargets;
+    }
+
+    private Game loadGame() {
+        String input = consoleView.readOption();
+        if(input.equals("1")) {
+            Game game = new Game(jdbcRepository.getNextId(), new Turn(Side.CHO), readChoFormation(), readHanFormation());
+            consoleView.printBoardStatus(game.getId(), game.getBoard(), game.calculateScore());
+            return game;
+        }
+        GameStatus gameStatus = jdbcRepository.findBoard(consoleView.readGameId());
+        Game game = new Game(gameStatus.getGameId(), gameStatus.getTurn(), gameStatus.getBoard());
+        consoleView.printBoardStatus(game.getId(), game.getBoard(), game.calculateScore());
+        return game;
+    }
+
+    private Position readSourcePosition() {
         while (true) {
             try {
-                return inputView.readTurnAction();
+                return consoleView.readSourcePosition();
             } catch (IllegalArgumentException e) {
-                outputView.printErrorMessage(e.getMessage());
+                consoleView.printErrorMessage(e.getMessage());
             }
         }
     }
@@ -87,52 +115,19 @@ public class JanggiController {
     private Position readTargetPosition() {
         while (true) {
             try {
-                int x = inputView.readTargetXPosition();
-                int y = inputView.readTargetYPosition();
-                return Position.of(x, y);
+                return consoleView.readTargetPosition();
             } catch (IllegalArgumentException e) {
-                outputView.printErrorMessage(e.getMessage());
+                consoleView.printErrorMessage(e.getMessage());
             }
         }
-    }
-
-    private Position readSourcePosition() {
-        while (true) {
-            try {
-                int x = inputView.readSourceXPosition();
-                int y = inputView.readSourceYPosition();
-                return Position.of(x, y);
-            } catch (IllegalArgumentException e) {
-                outputView.printErrorMessage(e.getMessage());
-            }
-        }
-    }
-
-    private BoardStatus loadBoard() {
-        String input = inputView.readOption();
-        if(input.equals("1")) {
-            Formation choFormation = readChoFormation();
-            Formation hanFormation = readHanFormation();
-            Board board = new Board(choFormation, hanFormation);
-            Long gameId = jdbcRepository.getNextId();
-            board.assignId(gameId);
-            outputView.printBoardStatus(board.getId(), board.getBoard(), board.calculateScore());
-            return BoardStatus.of(gameId, board.getBoard(), new Turn(Side.CHO));
-        }
-        String id = inputView.readGameId();
-        BoardStatus boardStatus = jdbcRepository.findBoard(id);
-        Board board = new Board(boardStatus.getBoard());
-        board.assignId(boardStatus.getGameId());
-        outputView.printBoardStatus(board.getId(), board.getBoard(), board.calculateScore());
-        return boardStatus;
     }
 
     private Formation readChoFormation() {
         while (true) {
             try {
-                return inputView.readChoFormation();
+                return consoleView.readChoFormation();
             } catch (IllegalArgumentException e) {
-                outputView.printErrorMessage(e.getMessage());
+                consoleView.printErrorMessage(e.getMessage());
             }
         }
     }
@@ -140,9 +135,19 @@ public class JanggiController {
     private Formation readHanFormation() {
         while (true) {
             try {
-                return inputView.readHanFormation();
+                return consoleView.readHanFormation();
             } catch (IllegalArgumentException e) {
-                outputView.printErrorMessage(e.getMessage());
+                consoleView.printErrorMessage(e.getMessage());
+            }
+        }
+    }
+
+    private TurnAction readTurnAction() {
+        while (true) {
+            try {
+                return consoleView.readTurnAction();
+            } catch (IllegalArgumentException e) {
+                consoleView.printErrorMessage(e.getMessage());
             }
         }
     }
