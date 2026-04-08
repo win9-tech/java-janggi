@@ -7,7 +7,7 @@ import domain.piece.Piece;
 
 import java.util.Map;
 
-public interface JdbcRepository {
+public interface GameRepository {
 
     Long getNextId();
 

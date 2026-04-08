@@ -2,7 +2,7 @@ package controller;
 
 import domain.*;
 import domain.piece.Piece;
-import repository.JdbcRepository;
+import repository.GameRepository;
 import view.ConsoleView;
 
 import java.util.List;
@@ -11,11 +11,11 @@ import java.util.Map;
 public class JanggiController {
 
     private final ConsoleView consoleView;
-    private final JdbcRepository jdbcRepository;
+    private final GameRepository gameRepository;
 
-    public JanggiController(ConsoleView consoleView, JdbcRepository jdbcRepository) {
+    public JanggiController(ConsoleView consoleView, GameRepository gameRepository) {
         this.consoleView = consoleView;
-        this.jdbcRepository = jdbcRepository;
+        this.gameRepository = gameRepository;
     }
 
     public void run() {
@@ -26,11 +26,11 @@ public class JanggiController {
     private Game loadGame() {
         String input = consoleView.readOption();
         if(input.equals("1")) {
-            Game game = new Game(jdbcRepository.getNextId(), new Turn(Side.CHO), readChoFormation(), readHanFormation());
+            Game game = new Game(gameRepository.getNextId(), new Turn(Side.CHO), readChoFormation(), readHanFormation());
             consoleView.printBoardStatus(game.getId(), game.getBoard(), game.calculateScore());
             return game;
         }
-        GameStatus gameStatus = jdbcRepository.findBoard(consoleView.readGameId());
+        GameStatus gameStatus = gameRepository.findBoard(consoleView.readGameId());
         Game game = new Game(gameStatus.getGameId(), gameStatus.getTurn(), gameStatus.getBoard());
         consoleView.printBoardStatus(game.getId(), game.getBoard(), game.calculateScore());
         return game;
@@ -38,7 +38,7 @@ public class JanggiController {
 
     private void playGame(Game game) {
         boolean isRunning = true;
-        jdbcRepository.saveBoard(game.getId(), game.getTurn(), game.getBoard());
+        gameRepository.saveBoard(game.getId(), game.getTurn(), game.getBoard());
         while (isRunning) {
             consoleView.printCurrentTurn(game.getTurn());
             TurnAction action = readTurnAction();
@@ -99,7 +99,7 @@ public class JanggiController {
 
     private void afterMove(Long id, Turn turn, Map<Position, Piece> board) {
         turn.next();
-        jdbcRepository.saveBoard(id, turn, board);
+        gameRepository.saveBoard(id, turn, board);
     }
 
     private Position readSourcePosition() {

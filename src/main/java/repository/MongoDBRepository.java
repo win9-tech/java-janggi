@@ -16,7 +16,7 @@ import org.bson.Document;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MongoDBRepository implements JdbcRepository {
+public class MongoDBRepository implements GameRepository {
 
     private static final Map<String, PieceType> NAME_TO_TYPE = Map.ofEntries(
             Map.entry("卒", PieceType.SOLDIER),
