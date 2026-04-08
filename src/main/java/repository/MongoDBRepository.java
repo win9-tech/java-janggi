@@ -14,6 +14,7 @@ import org.bson.Document;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import static constant.BoardConstant.*;
 
@@ -67,11 +68,11 @@ public class MongoDBRepository implements GameRepository {
     }
 
     @Override
-    public GameStatus findBoard(String gameId) {
+    public Optional<GameStatus> findBoard(String gameId) {
             MongoCollection<Document> collection = getCollection(client, "boards");
             Long id = Long.parseLong(gameId);
             Document document = collection.find(Filters.eq("_id", id)).first();
-            return parseGameStatus(id, document);
+            return Optional.ofNullable(parseGameStatus(id, document));
     }
 
     private MongoCollection<Document> getCollection(MongoClient client, String name) {

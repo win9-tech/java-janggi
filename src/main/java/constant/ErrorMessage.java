@@ -22,4 +22,5 @@ public class ErrorMessage {
     public static final String NOT_OWN_PIECE = "선택한 기물은 아군 기물이 아닙니다.";
     public static final String PIECE_NOT_FOUND = "해당 위치에 기물이 존재하지 않습니다.";
     public static final String INVALID_DIRECTION = "잘못된 방향 값입니다: %d, %d";
+    public static final String GAME_NOT_FOUND = "존재하지 않는 게임입니다.";
 }

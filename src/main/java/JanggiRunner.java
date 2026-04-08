@@ -7,6 +7,8 @@ import view.ConsoleView;
 import java.util.List;
 import java.util.Map;
 
+import static constant.ErrorMessage.GAME_NOT_FOUND;
+
 public class JanggiRunner {
 
     private final ConsoleView consoleView;
@@ -23,13 +25,32 @@ public class JanggiRunner {
     }
 
     private Game loadGame() {
-        int option = readOption();
-        if(option == 1) {
-            Game game = new Game(gameRepository.getNextId(), new Turn(Side.CHO), readChoFormation(), readHanFormation());
-            consoleView.printBoardStatus(game.getId(), game.getBoard(), game.calculateScore());
-            return game;
+        while (true) {
+            try {
+                return selectGame();
+            } catch (IllegalArgumentException e) {
+                consoleView.printErrorMessage(e.getMessage());
+            }
         }
-        GameStatus gameStatus = gameRepository.findBoard(consoleView.readGameId());
+    }
+
+    private Game selectGame() {
+        int option = readOption();
+        if (option == 1) {
+            return createNewGame();
+        }
+        return loadExistingGame();
+    }
+
+    private Game createNewGame() {
+        Game game = new Game(gameRepository.getNextId(), new Turn(Side.CHO), readChoFormation(), readHanFormation());
+        consoleView.printBoardStatus(game.getId(), game.getBoard(), game.calculateScore());
+        return game;
+    }
+
+    private Game loadExistingGame() {
+        GameStatus gameStatus = gameRepository.findBoard(consoleView.readGameId())
+                .orElseThrow(() -> new IllegalArgumentException(GAME_NOT_FOUND));
         Game game = new Game(gameStatus.getGameId(), gameStatus.getTurn(), gameStatus.getBoard());
         consoleView.printBoardStatus(game.getId(), game.getBoard(), game.calculateScore());
         return game;

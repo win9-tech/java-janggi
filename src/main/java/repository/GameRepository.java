@@ -5,6 +5,7 @@ import domain.Turn;
 import domain.piece.Piece;
 
 import java.util.Map;
+import java.util.Optional;
 
 public interface GameRepository {
 
@@ -14,5 +15,5 @@ public interface GameRepository {
 
     void deleteBoard(Long gameId);
 
-    GameStatus findBoard(String gameId);
+    Optional<GameStatus> findBoard(String gameId);
 }
