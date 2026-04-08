@@ -23,6 +23,19 @@ public class JanggiController {
         playGame(game);
     }
 
+    private Game loadGame() {
+        String input = consoleView.readOption();
+        if(input.equals("1")) {
+            Game game = new Game(jdbcRepository.getNextId(), new Turn(Side.CHO), readChoFormation(), readHanFormation());
+            consoleView.printBoardStatus(game.getId(), game.getBoard(), game.calculateScore());
+            return game;
+        }
+        GameStatus gameStatus = jdbcRepository.findBoard(consoleView.readGameId());
+        Game game = new Game(gameStatus.getGameId(), gameStatus.getTurn(), gameStatus.getBoard());
+        consoleView.printBoardStatus(game.getId(), game.getBoard(), game.calculateScore());
+        return game;
+    }
+
     private void playGame(Game game) {
         boolean isRunning = true;
         jdbcRepository.saveBoard(game.getId(), game.getTurn(), game.getBoard());
@@ -64,9 +77,16 @@ public class JanggiController {
         }
     }
 
-    private void afterMove(Long id, Turn turn, Map<Position, Piece> board) {
-        turn.next();
-        jdbcRepository.saveBoard(id, turn, board);
+    private List<Position> findAvailableTarget(Game game, Turn turn, Position sourcePosition) {
+        List<Position> availableTargets = game.findPath(sourcePosition, turn);
+        consoleView.printAvailablePath(game.getId(), availableTargets, game.getBoard(), game.calculateScore());
+        return availableTargets;
+    }
+
+    private Piece moveToTarget(Game game, Position sourcePosition, Position targetPosition, List<Position> availableTargets) {
+        Piece captured = game.movePiece(sourcePosition, targetPosition, availableTargets);
+        consoleView.printBoardStatus(game.getId(), game.getBoard(), game.calculateScore());
+        return captured;
     }
 
     private boolean validateGameFinished(Turn turn, Piece captured) {
@@ -77,29 +97,9 @@ public class JanggiController {
         return false;
     }
 
-    private Piece moveToTarget(Game game, Position sourcePosition, Position targetPosition, List<Position> availableTargets) {
-        Piece captured = game.movePiece(sourcePosition, targetPosition, availableTargets);
-        consoleView.printBoardStatus(game.getId(), game.getBoard(), game.calculateScore());
-        return captured;
-    }
-
-    private List<Position> findAvailableTarget(Game game, Turn turn, Position sourcePosition) {
-        List<Position> availableTargets = game.findPath(sourcePosition, turn);
-        consoleView.printAvailablePath(game.getId(), availableTargets, game.getBoard(), game.calculateScore());
-        return availableTargets;
-    }
-
-    private Game loadGame() {
-        String input = consoleView.readOption();
-        if(input.equals("1")) {
-            Game game = new Game(jdbcRepository.getNextId(), new Turn(Side.CHO), readChoFormation(), readHanFormation());
-            consoleView.printBoardStatus(game.getId(), game.getBoard(), game.calculateScore());
-            return game;
-        }
-        GameStatus gameStatus = jdbcRepository.findBoard(consoleView.readGameId());
-        Game game = new Game(gameStatus.getGameId(), gameStatus.getTurn(), gameStatus.getBoard());
-        consoleView.printBoardStatus(game.getId(), game.getBoard(), game.calculateScore());
-        return game;
+    private void afterMove(Long id, Turn turn, Map<Position, Piece> board) {
+        turn.next();
+        jdbcRepository.saveBoard(id, turn, board);
     }
 
     private Position readSourcePosition() {
