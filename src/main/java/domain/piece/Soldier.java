@@ -11,17 +11,17 @@ import java.util.List;
 
 public class Soldier extends Piece {
 
-    private final List<List<Direction>> PATHS;
+    private final List<List<Direction>> paths;
 
     public Soldier(Side side, MovementStrategy movementStrategy) {
         super(side, movementStrategy);
         if (Side.CHO == side) {
-            PATHS = List.of(
+            paths = List.of(
                     List.of(Direction.UP), List.of(Direction.RIGHT), List.of(Direction.LEFT)
             );
             return;
         }
-        PATHS = List.of(
+        paths = List.of(
                 List.of(Direction.DOWN), List.of(Direction.RIGHT), List.of(Direction.LEFT)
         );
     }
@@ -41,9 +41,9 @@ public class Soldier extends Piece {
     private List<List<Direction>> buildPaths(Position source) {
         Palace palace = Palace.getInstance();
         if (!palace.isInPalace(source)) {
-            return PATHS;
+            return paths;
         }
-        List<List<Direction>> paths = new ArrayList<>(PATHS);
+        List<List<Direction>> paths = new ArrayList<>(this.paths);
         for (Direction direction : palace.getDirections(source)) {
             if (isForwardDiagonal(direction)) {
                 paths.add(List.of(direction));
