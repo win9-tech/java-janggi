@@ -5,7 +5,6 @@ import repository.GameStatus;
 import view.ConsoleView;
 
 import java.util.List;
-import java.util.Map;
 
 import static constant.ErrorMessage.GAME_NOT_FOUND;
 
@@ -68,7 +67,7 @@ public class JanggiRunner {
 
     private void playGame(Game game) {
         boolean isRunning = true;
-        gameRepository.saveBoard(game.getId(), game.getTurn(), game.getBoard());
+        gameRepository.saveGame(game);
         while (isRunning) {
             consoleView.printCurrentTurn(game.getTurn());
             TurnAction action = readTurnAction();
@@ -109,7 +108,8 @@ public class JanggiRunner {
             gameRepository.deleteBoard(game.getId());
             return false;
         }
-        afterMove(game.getId(), game.getTurn(), game.getBoard());
+        turn.next();
+        afterMove(game);
         return true;
     }
 
@@ -125,9 +125,8 @@ public class JanggiRunner {
         return captured;
     }
 
-    private void afterMove(Long id, Turn turn, Map<Position, Piece> board) {
-        turn.next();
-        gameRepository.saveBoard(id, turn, board);
+    private void afterMove(Game game) {
+        gameRepository.saveGame(game);
     }
 
     private Position readSourcePosition() {

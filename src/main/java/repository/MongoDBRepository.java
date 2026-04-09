@@ -5,6 +5,7 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.*;
+import domain.Game;
 import domain.Position;
 import domain.Side;
 import domain.Turn;
@@ -61,10 +62,10 @@ public class MongoDBRepository implements GameRepository {
     }
 
     @Override
-    public void saveBoard(Long gameId, Turn turn, Map<Position, Piece> board) {
+    public void saveGame(Game game) {
             MongoCollection<Document> collection = getCollection(client, "boards");
-            Document doc = createGameDocument(gameId, turn, board);
-            collection.replaceOne(Filters.eq("_id", gameId), doc, new ReplaceOptions().upsert(true));
+            Document doc = createGameDocument(game.getId(), game.getTurn(), game.getBoard());
+            collection.replaceOne(Filters.eq("_id", game.getId()), doc, new ReplaceOptions().upsert(true));
     }
 
     @Override
