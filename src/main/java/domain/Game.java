@@ -61,11 +61,7 @@ public class Game {
     }
 
     public ScoreStatus calculateScore() {
-        ScoreStatus scoreStatus = new ScoreStatus();
-        for(Piece piece : board.values()) {
-            scoreStatus.reflect(piece);
-        }
-        return scoreStatus;
+        return ScoreStatus.from(board.values());
     }
 
     public Long getId() {

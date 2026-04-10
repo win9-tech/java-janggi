@@ -52,11 +52,7 @@ public class OutputView {
     }
 
     public void printResultByScore(ScoreStatus scoreStatus) {
-        if (scoreStatus.getChoScore() > scoreStatus.getHanScore()) {
-            printWinner(Side.CHO);
-            return;
-        }
-        printWinner(Side.HAN);
+        printWinner(scoreStatus.winner());
     }
 
     public void printErrorMessage(String errorMessage) {
@@ -66,7 +62,7 @@ public class OutputView {
     private void printBoardHeader(Long id, ScoreStatus scoreStatus) {
         System.out.println();
         System.out.println(id + "번 게임");
-        System.out.println(BLUE + " 초: " + scoreStatus.getChoScore() + "            " + RED + "한: " + scoreStatus.getHanScore() + RESET);
+        System.out.println(BLUE + " 초: " + scoreStatus.choScoreText() + "            " + RED + "한: " + scoreStatus.hanScoreText() + RESET);
         System.out.println("    1  2  3  4  5  6  7  8  9");
     }
 
