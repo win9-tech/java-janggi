@@ -5,6 +5,7 @@ import repository.GameStatus;
 import view.ConsoleView;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 import static constant.ErrorMessage.GAME_NOT_FOUND;
 
@@ -24,13 +25,7 @@ public class JanggiRunner {
     }
 
     private Game loadGame() {
-        while (true) {
-            try {
-                return selectGame();
-            } catch (IllegalArgumentException e) {
-                consoleView.printErrorMessage(e.getMessage());
-            }
-        }
+        return retryOnError(this::selectGame);
     }
 
     private Game selectGame() {
@@ -56,13 +51,7 @@ public class JanggiRunner {
     }
 
     private int readOption() {
-        while (true) {
-            try {
-                return consoleView.readOption();
-            } catch (IllegalArgumentException e) {
-                consoleView.printErrorMessage(e.getMessage());
-            }
-        }
+        return retryOnError(consoleView::readOption);
     }
 
     private void playGame(Game game) {
@@ -130,49 +119,29 @@ public class JanggiRunner {
     }
 
     private Position readSourcePosition() {
-        while (true) {
-            try {
-                return consoleView.readSourcePosition();
-            } catch (IllegalArgumentException e) {
-                consoleView.printErrorMessage(e.getMessage());
-            }
-        }
+        return retryOnError(consoleView::readSourcePosition);
     }
 
     private Position readTargetPosition() {
-        while (true) {
-            try {
-                return consoleView.readTargetPosition();
-            } catch (IllegalArgumentException e) {
-                consoleView.printErrorMessage(e.getMessage());
-            }
-        }
+        return retryOnError(consoleView::readTargetPosition);
     }
 
     private Formation readChoFormation() {
-        while (true) {
-            try {
-                return consoleView.readChoFormation();
-            } catch (IllegalArgumentException e) {
-                consoleView.printErrorMessage(e.getMessage());
-            }
-        }
+        return retryOnError(consoleView::readChoFormation);
     }
 
     private Formation readHanFormation() {
-        while (true) {
-            try {
-                return consoleView.readHanFormation();
-            } catch (IllegalArgumentException e) {
-                consoleView.printErrorMessage(e.getMessage());
-            }
-        }
+        return retryOnError(consoleView::readHanFormation);
     }
 
     private TurnAction readTurnAction() {
+        return retryOnError(consoleView::readTurnAction);
+    }
+
+    private <T> T retryOnError(Supplier<T> action) {
         while (true) {
             try {
-                return consoleView.readTurnAction();
+                return action.get();
             } catch (IllegalArgumentException e) {
                 consoleView.printErrorMessage(e.getMessage());
             }
