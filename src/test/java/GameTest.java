@@ -462,5 +462,137 @@ public class GameTest {
                         .isInstanceOf(IllegalArgumentException.class);
             }
         }
+
+        @Nested
+        @DisplayName("궁성 내 대각선 이동")
+        class PalaceDiagonalMove {
+
+            @Test
+            @DisplayName("궁이 궁성 중앙에서 대각선으로 이동한다")
+            void 궁이_궁성_중앙에서_대각선으로_이동한다() {
+                // given
+                Game game = createGame(Formation.상마마상, Formation.상마마상);
+                Position source = Position.of(5, 2);
+                Position target = Position.of(4, 3);
+
+                // when
+                move(game, new Turn(Side.HAN), source, target);
+
+                // then
+                assertThat(game.getBoard().get(target)).isInstanceOf(King.class);
+                assertThat(game.getBoard().get(source)).isInstanceOf(Empty.class);
+            }
+
+            @Test
+            @DisplayName("궁이 궁성 모서리에서 중앙으로 대각선 이동한다")
+            void 궁이_궁성_모서리에서_중앙으로_대각선_이동한다() {
+                // given
+                Game game = createGame(Formation.상마마상, Formation.상마마상);
+                Turn turn = new Turn(Side.HAN);
+                move(game, turn, Position.of(5, 2), Position.of(4, 3));
+
+                // when
+                move(game, turn, Position.of(4, 3), Position.of(5, 2));
+
+                // then
+                assertThat(game.getBoard().get(Position.of(5, 2))).isInstanceOf(King.class);
+            }
+
+            @Test
+            @DisplayName("사가 궁성 내에서 대각선으로 이동한다")
+            void 사가_궁성_내에서_대각선으로_이동한다() {
+                // given
+                Game game = createGame(Formation.상마마상, Formation.상마마상);
+                Turn turn = new Turn(Side.HAN);
+                move(game, turn, Position.of(5, 2), Position.of(5, 1));
+
+                // when
+                move(game, turn, Position.of(4, 1), Position.of(5, 2));
+
+                // then
+                assertThat(game.getBoard().get(Position.of(5, 2))).isInstanceOf(Guard.class);
+            }
+
+            @Test
+            @DisplayName("쫄이 궁성 내에서 대각선으로 이동한다")
+            void 쫄이_궁성_내에서_대각선으로_이동한다() {
+                // given
+                Game game = createGame(Formation.상마마상, Formation.상마마상);
+
+                // when
+                move(game, new Turn(Side.CHO), Position.of(5, 7), Position.of(4,7));
+                move(game, new Turn(Side.CHO), Position.of(4, 7), Position.of(4,6));
+                move(game, new Turn(Side.CHO), Position.of(4, 6), Position.of(4,5));
+                move(game, new Turn(Side.CHO), Position.of(4, 5), Position.of(4,4));
+                move(game, new Turn(Side.CHO), Position.of(4, 4), Position.of(4,3));
+                move(game, new Turn(Side.CHO), Position.of(4, 3), Position.of(5,2));
+
+                // then
+                assertThat(game.getBoard().get(Position.of(4,3))).isInstanceOf(Empty.class);
+                assertThat(game.getBoard().get(Position.of(5,2))).isInstanceOf(Soldier.class);
+            }
+
+            @Test
+            @DisplayName("병이 궁성 내에서 대각선으로 이동한다")
+            void 병이_궁성_내에서_대각선으로_이동한다() {
+                // given
+                Game game = createGame(Formation.상마마상, Formation.상마마상);
+
+                // when
+                move(game, new Turn(Side.HAN), Position.of(5, 4), Position.of(4,4));
+                move(game, new Turn(Side.HAN), Position.of(4, 4), Position.of(4,5));
+                move(game, new Turn(Side.HAN), Position.of(4, 5), Position.of(4,6));
+                move(game, new Turn(Side.HAN), Position.of(4, 6), Position.of(4,7));
+                move(game, new Turn(Side.HAN), Position.of(4, 7), Position.of(4,8));
+                move(game, new Turn(Side.HAN), Position.of(4, 8), Position.of(5,9));
+
+                // then
+                assertThat(game.getBoard().get(Position.of(4,8))).isInstanceOf(Empty.class);
+                assertThat(game.getBoard().get(Position.of(5,9))).isInstanceOf(Soldier.class);
+            }
+
+            @Test
+            @DisplayName("차가 궁성 내에서 대각선으로 이동한다")
+            void 차가_궁성_내에서_대각선으로_이동한다() {
+                // given
+                Game game = createGame(Formation.상마마상, Formation.상마마상);
+
+                // when
+                // 차 이동
+                move(game, new Turn(Side.CHO), Position.of(1, 10), Position.of(1, 9));
+                move(game, new Turn(Side.CHO), Position.of(1, 9), Position.of(4, 9));
+                move(game, new Turn(Side.CHO), Position.of(4, 9), Position.of(4, 8));
+
+                // 궁 이동
+                move(game, new Turn(Side.CHO), Position.of(5, 9), Position.of(5, 10));
+
+                // 차 이동
+                move(game, new Turn(Side.CHO), Position.of(4, 8), Position.of(5, 9));
+
+                // then
+                assertThat(game.getBoard().get(Position.of(5,9))).isInstanceOf(Chariot.class);
+                assertThat(game.getBoard().get(Position.of(4, 9))).isInstanceOf(Empty.class);
+            }
+
+            @Test
+            @DisplayName("포가 궁성 중앙에서 대각선으로 이동한다")
+            void 포가_궁성_내에서_대각선으로_이동한다() {
+                // given
+                Game game = createGame(Formation.마상마상, Formation.상마마상);
+
+                // when
+                // 마 이동 & 사 이동
+                move(game, new Turn(Side.CHO), Position.of(2, 10), Position.of(3, 8));
+                move(game, new Turn(Side.CHO), Position.of(6, 10), Position.of(6, 9));
+
+                // 포 이동
+                move(game, new Turn(Side.CHO), Position.of(2, 8), Position.of(4, 8));
+                move(game, new Turn(Side.CHO), Position.of(4, 8), Position.of(6, 10));
+
+                // then
+                assertThat(game.getBoard().get(Position.of(4,8))).isInstanceOf(Empty.class);
+                assertThat(game.getBoard().get(Position.of(6, 10))).isInstanceOf(Cannon.class);
+            }
+        }
     }
 }
