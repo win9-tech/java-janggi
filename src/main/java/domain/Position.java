@@ -1,14 +1,11 @@
 package domain;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static constant.BoardConstant.*;
 import static constant.ErrorMessage.INVALID_POSITION_RANGE;
 
 public class Position {
 
-    private static final Map<Integer, Position> CACHE = new HashMap<>();
+    private static final Position[][] CACHE = new Position[MAX_X + 1][MAX_Y + 1];
     private final int x;
     private final int y;
 
@@ -19,7 +16,10 @@ public class Position {
 
     public static Position of(int x, int y) {
         validateOutOfRange(x, y);
-        return CACHE.computeIfAbsent(x * 100 + y, k -> new Position(x, y));
+        if (CACHE[x][y] == null) {
+            CACHE[x][y] = new Position(x, y);
+        }
+        return CACHE[x][y];
     }
 
     public boolean canMove(int dx, int dy) {
