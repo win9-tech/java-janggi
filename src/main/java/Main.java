@@ -5,7 +5,9 @@ import view.OutputView;
 
 public class Main {
     public static void main(String[] args) {
-        JanggiRunner janggiRunner = new JanggiRunner(new ConsoleView(new InputView(), new OutputView()), new MongoDBRepository());
-        janggiRunner.run();
+        try (MongoDBRepository repository = new MongoDBRepository()) {
+            JanggiRunner janggiRunner = new JanggiRunner(new ConsoleView(new InputView(), new OutputView()), repository);
+            janggiRunner.run();
+        }
     }
 }

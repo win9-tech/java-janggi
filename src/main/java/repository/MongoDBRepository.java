@@ -19,7 +19,7 @@ import java.util.Optional;
 
 import static constant.BoardConstant.*;
 
-public class MongoDBRepository implements GameRepository {
+public class MongoDBRepository implements GameRepository, AutoCloseable {
 
     private static final String URI = "mongodb://localhost:27017";
     private static final String DB_NAME = "janggi_db";
@@ -127,5 +127,10 @@ public class MongoDBRepository implements GameRepository {
         PieceType type = NAME_TO_TYPE.get(pieceDoc.getString("type"));
         Side side = Side.valueOf(pieceDoc.getString("side"));
         return type.create(side);
+    }
+
+    @Override
+    public void close() {
+        client.close();
     }
 }
