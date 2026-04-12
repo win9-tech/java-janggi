@@ -1,5 +1,4 @@
 import domain.*;
-import domain.piece.Piece;
 import repository.GameRepository;
 import view.ConsoleView;
 
@@ -82,16 +81,16 @@ public class JanggiRunner {
             Position sourcePosition = readSourcePosition();
             List<Position> availableTargets = findAvailableTarget(game, turn, sourcePosition);
             Position targetPosition = readTargetPosition();
-            Piece captured = moveToTarget(game, sourcePosition, targetPosition, availableTargets);
-            return handleMoveResult(game, turn, captured);
+            moveToTarget(game, sourcePosition, targetPosition, availableTargets);
+            return handleMoveResult(game, turn);
         } catch (IllegalArgumentException e) {
             consoleView.printErrorMessage(e.getMessage());
             return true;
         }
     }
 
-    private boolean handleMoveResult(Game game, Turn turn, Piece captured) {
-        if (captured.isKing()) {
+    private boolean handleMoveResult(Game game, Turn turn) {
+        if (game.isFinished()) {
             consoleView.printWinner(turn.current());
             gameRepository.deleteBoard(game.getId());
             return false;
@@ -107,10 +106,9 @@ public class JanggiRunner {
         return availableTargets;
     }
 
-    private Piece moveToTarget(Game game, Position sourcePosition, Position targetPosition, List<Position> availableTargets) {
-        Piece captured = game.movePiece(sourcePosition, targetPosition, availableTargets);
+    private void moveToTarget(Game game, Position sourcePosition, Position targetPosition, List<Position> availableTargets) {
+        game.movePiece(sourcePosition, targetPosition, availableTargets);
         consoleView.printBoardStatus(game.getId(), game.getBoard(), game.calculateScore());
-        return captured;
     }
 
     private void afterMove(Game game) {

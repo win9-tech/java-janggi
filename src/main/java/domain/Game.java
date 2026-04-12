@@ -49,20 +49,23 @@ public class Game {
         return filterValidTargets(piece, sourcePosition);
     }
 
-    public Piece movePiece(Position source, Position target, List<Position> availableTargets) {
+    public void movePiece(Position source, Position target, List<Position> availableTargets) {
         if (!availableTargets.contains(target)) {
             throw new IllegalArgumentException(INVALID_TARGET_POSITION);
         }
         Piece piece = board.get(source);
-        Piece captured = board.get(target);
         board.put(target, piece);
         board.put(source, new Empty());
-        return captured;
     }
 
     public ScoreStatus calculateScore() {
         return ScoreStatus.from(board.values());
     }
+
+    public boolean isFinished() {
+        return board.values().stream().filter(Piece::isKing).count() < 2;
+    }
+
 
     public Long getId() {
         return id;
