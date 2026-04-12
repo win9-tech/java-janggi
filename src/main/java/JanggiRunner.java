@@ -1,7 +1,6 @@
 import domain.*;
 import domain.piece.Piece;
 import repository.GameRepository;
-import repository.GameStatus;
 import view.ConsoleView;
 
 import java.util.List;
@@ -38,14 +37,15 @@ public class JanggiRunner {
 
     private Game createNewGame() {
         Game game = new Game(gameRepository.getNextId(), new Turn(Side.CHO), readChoFormation(), readHanFormation());
+        gameRepository.saveGame(game);
         consoleView.printBoardStatus(game.getId(), game.getBoard(), game.calculateScore());
         return game;
     }
 
     private Game loadExistingGame() {
-        GameStatus gameStatus = gameRepository.findBoard(consoleView.readGameId())
-                .orElseThrow(() -> new IllegalArgumentException(GAME_NOT_FOUND));
-        Game game = new Game(gameStatus.getGameId(), gameStatus.getTurn(), gameStatus.getBoard());
+        Game game = gameRepository.findBoard(consoleView.readGameId())
+                .orElseThrow(() -> new IllegalArgumentException(GAME_NOT_FOUND))
+                .toGame();
         consoleView.printBoardStatus(game.getId(), game.getBoard(), game.calculateScore());
         return game;
     }
@@ -56,7 +56,6 @@ public class JanggiRunner {
 
     private void playGame(Game game) {
         boolean isRunning = true;
-        gameRepository.saveGame(game);
         while (isRunning) {
             consoleView.printCurrentTurn(game.getTurn());
             TurnAction action = readTurnAction();
