@@ -595,4 +595,40 @@ public class GameTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("게임 종료 판단")
+    class IsFinished {
+
+        @Test
+        @DisplayName("양 진영 궁이 모두 살아있으면 게임은 종료되지 않는다.")
+        void 양_진영_궁이_모두_살아있으면_종료되지_않는다() {
+            Game game = createGame(Formation.상마마상, Formation.상마마상);
+
+            assertThat(game.isFinished()).isFalse();
+        }
+
+        @Test
+        @DisplayName("한 쪽 궁이 잡히면 게임이 종료된다.")
+        void 한_쪽_궁이_잡히면_종료된다() {
+            Map<Position, Piece> board = Map.of(
+                    Position.of(5, 9), PieceType.KING.create(Side.CHO)
+            );
+            Game game = new Game(TEST_ID, new Turn(Side.CHO), board);
+
+            assertThat(game.isFinished()).isTrue();
+        }
+
+        @Test
+        @DisplayName("양 진영 궁이 모두 남아있으면 종료되지 않는다.")
+        void 양_진영_궁이_모두_남아있으면_종료되지_않는다() {
+            Map<Position, Piece> board = Map.of(
+                    Position.of(5, 2), PieceType.KING.create(Side.HAN),
+                    Position.of(5, 9), PieceType.KING.create(Side.CHO)
+            );
+            Game game = new Game(TEST_ID, new Turn(Side.CHO), board);
+
+            assertThat(game.isFinished()).isFalse();
+        }
+    }
 }
