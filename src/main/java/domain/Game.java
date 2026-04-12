@@ -66,7 +66,6 @@ public class Game {
         return board.values().stream().filter(Piece::isKing).count() < 2;
     }
 
-
     public Long getId() {
         return id;
     }

@@ -3,8 +3,8 @@ package repository;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.*;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.ReplaceOptions;
 import domain.Game;
 import domain.Position;
 import domain.Side;
@@ -19,15 +19,11 @@ import java.util.Optional;
 
 import static constant.BoardConstant.*;
 
-public class MongoDBRepository implements GameRepository, AutoCloseable {
+public class MongoGameRepository implements GameRepository, AutoCloseable {
 
     private static final String URI = "mongodb://localhost:27017";
     private static final String DB_NAME = "janggi_db";
-    private final MongoClient client;
-
-    public MongoDBRepository() {
-        this.client = MongoClients.create(URI);
-    }
+    private static final String COLLECTION_NAME = "boards";
 
     private static final Map<String, PieceType> NAME_TO_TYPE = Map.ofEntries(
             Map.entry("卒", PieceType.SOLDIER),
@@ -44,41 +40,35 @@ public class MongoDBRepository implements GameRepository, AutoCloseable {
             Map.entry("．", PieceType.EMPTY)
     );
 
-    @Override
-    public Long getNextId() {
-            MongoCollection<Document> counters = getCollection(client, "counters");
-            Document result = counters.findOneAndUpdate(
-                    Filters.eq("_id", "gameId"),
-                    Updates.inc("seq", 1L),
-                    new FindOneAndUpdateOptions().upsert(true).returnDocument(ReturnDocument.AFTER)
-            );
-            return result.getLong("seq");
+    private final MongoClient client;
+    private final MongoCollection<Document> collection;
+
+    public MongoGameRepository() {
+        this.client = MongoClients.create(URI);
+        this.collection = client.getDatabase(DB_NAME).getCollection(COLLECTION_NAME);
     }
 
     @Override
-    public void deleteBoard(Long gameId) {
-            MongoCollection<Document> collection = getCollection(client, "boards");
-            collection.deleteOne(Filters.eq("_id", gameId));
+    public void close() {
+        client.close();
     }
 
     @Override
     public void saveGame(Game game) {
-            MongoCollection<Document> collection = getCollection(client, "boards");
-            Document doc = createGameDocument(game.getId(), game.getTurn(), game.getBoard());
-            collection.replaceOne(Filters.eq("_id", game.getId()), doc, new ReplaceOptions().upsert(true));
+        Document doc = createGameDocument(game.getId(), game.getTurn(), game.getBoard());
+        collection.replaceOne(Filters.eq("_id", game.getId()), doc, new ReplaceOptions().upsert(true));
+    }
+
+    @Override
+    public void deleteBoard(Long gameId) {
+        collection.deleteOne(Filters.eq("_id", gameId));
     }
 
     @Override
     public Optional<GameStatus> findBoard(String gameId) {
-            MongoCollection<Document> collection = getCollection(client, "boards");
-            Long id = Long.parseLong(gameId);
-            Document document = collection.find(Filters.eq("_id", id)).first();
-            return Optional.ofNullable(parseGameStatus(id, document));
-    }
-
-    private MongoCollection<Document> getCollection(MongoClient client, String name) {
-        MongoDatabase database = client.getDatabase(DB_NAME);
-        return database.getCollection(name);
+        Long id = Long.parseLong(gameId);
+        Document document = collection.find(Filters.eq("_id", id)).first();
+        return Optional.ofNullable(parseGameStatus(id, document));
     }
 
     private Document createGameDocument(Long gameId, Turn turn, Map<Position, Piece> board) {
@@ -127,10 +117,5 @@ public class MongoDBRepository implements GameRepository, AutoCloseable {
         PieceType type = NAME_TO_TYPE.get(pieceDoc.getString("type"));
         Side side = Side.valueOf(pieceDoc.getString("side"));
         return type.create(side);
-    }
-
-    @Override
-    public void close() {
-        client.close();
     }
 }

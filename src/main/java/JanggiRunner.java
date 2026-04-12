@@ -1,4 +1,5 @@
 import domain.*;
+import repository.CounterRepository;
 import repository.GameRepository;
 import view.ConsoleView;
 
@@ -11,10 +12,12 @@ public class JanggiRunner {
 
     private final ConsoleView consoleView;
     private final GameRepository gameRepository;
+    private final CounterRepository counterRepository;
 
-    public JanggiRunner(ConsoleView consoleView, GameRepository gameRepository) {
+    public JanggiRunner(ConsoleView consoleView, GameRepository gameRepository, CounterRepository counterRepository) {
         this.consoleView = consoleView;
         this.gameRepository = gameRepository;
+        this.counterRepository = counterRepository;
     }
 
     public void run() {
@@ -35,7 +38,7 @@ public class JanggiRunner {
     }
 
     private Game createNewGame() {
-        Game game = new Game(gameRepository.getNextId(), new Turn(Side.CHO), readChoFormation(), readHanFormation());
+        Game game = new Game(counterRepository.getNextId(), new Turn(Side.CHO), readChoFormation(), readHanFormation());
         gameRepository.saveGame(game);
         consoleView.printBoardStatus(game.getId(), game.getBoard(), game.calculateScore());
         return game;
