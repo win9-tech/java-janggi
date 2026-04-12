@@ -2,6 +2,8 @@ package constant;
 
 public class ErrorMessage {
 
+    private ErrorMessage() {}
+
     public static final String ERROR_PREFIX = "[ERROR] ";
 
     public static final String READ_FORMATION_MESSAGE = "[%s] 포진을 선택해주세요.";
