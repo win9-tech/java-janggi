@@ -1,5 +1,6 @@
 package repository;
 
+import domain.Game;
 import domain.Position;
 import domain.Turn;
 import domain.piece.Piece;
@@ -22,15 +23,7 @@ public class GameStatus {
         return new GameStatus(gameId, board, turn);
     }
 
-    public Long getGameId() {
-        return gameId;
-    }
-
-    public Map<Position, Piece> getBoard() {
-        return board;
-    }
-
-    public Turn getTurn() {
-        return turn;
+    public Game toGame() {
+        return new Game(gameId, turn, board);
     }
 }
