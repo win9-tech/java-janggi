@@ -80,16 +80,13 @@ public class JanggiRunner {
     }
 
     private boolean move(Game game, Turn turn) {
-        try {
+        return retryOnError(() -> {
             Position sourcePosition = readSourcePosition();
             List<Position> availableTargets = findAvailableTarget(game, turn, sourcePosition);
             Position targetPosition = readTargetPosition();
             moveToTarget(game, sourcePosition, targetPosition, availableTargets);
             return handleMoveResult(game, turn);
-        } catch (IllegalArgumentException e) {
-            consoleView.printErrorMessage(e.getMessage());
-            return true;
-        }
+        });
     }
 
     private boolean handleMoveResult(Game game, Turn turn) {
